@@ -1,7 +1,6 @@
 package lahman_test
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/frenata/marcel/lahman"
@@ -39,5 +38,28 @@ func Test_ReadFull(t *testing.T) {
 	if err != nil {
 		t.Fatal("error reading full file")
 	}
-	fmt.Println(batters[len(batters)-1])
+	//	fmt.Println(batters[len(batters)-1])
+
+	b := batters[len(batters)-1]
+	// add checks for last batter
+	switch {
+	case err != nil:
+		t.Log(err)
+		t.Fatal("Parsing error")
+	case b.ID != "zuninmi01":
+		t.Log("ID: ", b.ID)
+		t.Fatal("Incorrectly parsed ID")
+		fallthrough
+	case b.Team != "SEA":
+		t.Log("Team: ", b.Team)
+		t.Fatal("Incorrectly parsed Team")
+		fallthrough
+	case b.HR != 22:
+		t.Log("Homeruns: ", b.HR)
+		t.Fatal("Incorrectly parsed HR")
+		fallthrough
+	case b.SF != 4:
+		t.Log("SF: ", b.SF)
+		t.Fatal("Incorrectly parsed SF")
+	}
 }
