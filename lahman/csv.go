@@ -6,22 +6,26 @@ import (
 	"io/ioutil"
 )
 
-func ReadCSV(file string) (*csv.Reader, error) {
+// csvReader is an interface that can read a line of csv and create an object
+type csvReader interface {
+	csvRead([]string) (csvReader, error)
+}
+
+// newReader starts up a new csv reader from a file
+func newReader(file string) (*csv.Reader, error) {
 	b, err := ioutil.ReadFile(file)
 	if err != nil {
 		return nil, err
 	}
-
-	//	buff := bytes.NewBuffer(b)
-	//	s := b.String()
 
 	r := csv.NewReader(bytes.NewReader(b))
 
 	return r, nil
 }
 
-func ReadAll(file string) ([]*Batter, error) {
-	r, err := ReadCSV(file)
+// ReadAll reads all the lines from a csv file and creates a list of objects from that file.
+func ReadAll(file string) ([]csvReader, error) {
+	r, err := newReader(file)
 	if err != nil {
 		return nil, err
 	}
@@ -32,15 +36,14 @@ func ReadAll(file string) ([]*Batter, error) {
 		return nil, err
 	}
 
-	batters := make([]*Batter, len(lines))
+	results := make([]csvReader, len(lines))
 	for i, l := range lines {
-		//err := batters[i].csvRead(l)
-		b, err := NewBatterCSV(l)
+		b, err := Batter{}.csvRead(l)
 		if err != nil {
 			return nil, err
 		}
-		batters[i] = b
+		results[i] = b
 	}
 
-	return batters, err
+	return results, err
 }
