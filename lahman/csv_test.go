@@ -47,7 +47,7 @@ func Test_BadFile(t *testing.T) {
 
 // test read full file, check last line
 func Test_ReadFull(t *testing.T) {
-	batters, err := ReadAll("data/Batting.csv")
+	batters, err := ReadAll("data/Batting.csv", Batter{})
 	if err != nil {
 		t.Fatal("error reading full file")
 	}
@@ -73,6 +73,38 @@ func Test_ReadFull(t *testing.T) {
 		fallthrough
 	case b.SF != 4:
 		t.Log("SF: ", b.SF)
+		t.Fatal("Incorrectly parsed SF")
+	}
+}
+
+// test read full file, check last line
+func Test_ReadFullPitch(t *testing.T) {
+	pitchers, err := ReadAll("data/Pitching.csv", Pitcher{})
+	if err != nil {
+		t.Log(err)
+		t.Fatal("error reading full file")
+	}
+
+	p := pitchers[len(pitchers)-1].(*Pitcher)
+	// add checks for last batter
+	switch {
+	case err != nil:
+		t.Log(err)
+		t.Fatal("Parsing error")
+	case p.ID != "zimmejo02":
+		t.Log("ID: ", p.ID)
+		t.Fatal("Incorrectly parsed ID")
+		fallthrough
+	case p.Team != "WAS":
+		t.Log("Team: ", p.Team)
+		t.Fatal("Incorrectly parsed Team")
+		fallthrough
+	case p.HR != 13:
+		t.Log("Homeruns: ", p.HR)
+		t.Fatal("Incorrectly parsed HR")
+		fallthrough
+	case p.SF != 3:
+		t.Log("SF: ", p.SF)
 		t.Fatal("Incorrectly parsed SF")
 	}
 }

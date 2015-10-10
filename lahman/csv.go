@@ -24,7 +24,7 @@ func newReader(file string) (*csv.Reader, error) {
 }
 
 // ReadAll reads all the lines from a csv file and creates a list of objects from that file.
-func ReadAll(file string) ([]csvReader, error) {
+func ReadAll(file string, c csvReader) ([]csvReader, error) {
 	r, err := newReader(file)
 	if err != nil {
 		return nil, err
@@ -38,7 +38,7 @@ func ReadAll(file string) ([]csvReader, error) {
 
 	results := make([]csvReader, len(lines))
 	for i, l := range lines {
-		b, err := Batter{}.csvRead(l)
+		b, err := c.csvRead(l)
 		if err != nil {
 			return nil, err
 		}
