@@ -20,7 +20,7 @@ func ReadCSV(file string) (*csv.Reader, error) {
 	return r, nil
 }
 
-func ReadAll(file string) ([]*Player, error) {
+func ReadAll(file string) ([]*Batter, error) {
 	r, err := ReadCSV(file)
 	if err != nil {
 		return nil, err
@@ -32,8 +32,9 @@ func ReadAll(file string) ([]*Player, error) {
 		return nil, err
 	}
 
-	batters := make([]*Player, len(lines))
+	batters := make([]*Batter, len(lines))
 	for i, l := range lines {
+		//err := batters[i].csvRead(l)
 		b, err := NewBatterCSV(l)
 		if err != nil {
 			return nil, err

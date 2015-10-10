@@ -1,13 +1,24 @@
 package lahman
 
-import "strconv"
+import (
+	"fmt"
+	"strconv"
+)
 
 type Batter struct {
+	Player
 	G, AB, R, H, H2, H3, HR, RBI, SB, CS, BB, SO, IBB, HBP, SH, SF, GIDP int16
 }
 
-func NewBatterCSV(r []string) (*Player, error) {
-	b := &Player{Batter: Batter{}}
+func (b Batter) String() string {
+	return fmt.Sprintf("%s,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d",
+		b.Player, b.G, b.AB, b.R, b.H, b.H2, b.H3, b.HR, b.RBI, b.SB, b.CS,
+		b.BB, b.SO, b.IBB, b.HBP, b.SH, b.SF, b.GIDP)
+
+}
+
+func NewBatterCSV(r []string) (*Batter, error) {
+	b := &Batter{Player: Player{}}
 	ep := &errParser{}
 
 	b.ID = r[0]

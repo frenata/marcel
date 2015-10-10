@@ -53,7 +53,7 @@ func Test_Parsing(t *testing.T) {
 }
 
 // helper to test specific player line
-func checkLineTwo(b *lahman.Player, err error, t *testing.T) {
+func checkLineTwo(b *lahman.Batter, err error, t *testing.T) {
 	switch {
 	case err != nil:
 		t.Log(err)
