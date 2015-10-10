@@ -4,10 +4,10 @@ import "strconv"
 
 type Batter struct {
 	Player
-	G, AB, R, H, H2, H3, HR, RBI, SB, CS, BB, SO, IBB, HBP, SH, SF, GIDP uint16
+	G, AB, R, H, H2, H3, HR, RBI, SB, CS, BB, SO, IBB, HBP, SH, SF, GIDP int16
 }
 
-func NewBatter(id string, year, stint uint16) (*Batter, error) {
+func NewBatter(id string, year, stint int16) (*Batter, error) {
 	b := &Batter{Player: Player{ID: id, Year: year, Stint: stint}}
 	// search the db for the correct entry, fill in the data
 
@@ -48,19 +48,19 @@ func NewBatterCSV(r []string) (*Batter, error) {
 	return b, nil
 }
 
-func (ep *errParser) parseStat(s string) uint16 {
+func (ep *errParser) parseStat(s string) int16 {
 	if s == "" {
 		return 0
 	}
 
-	n, err := strconv.ParseUint(s, 10, 16)
+	n, err := strconv.ParseInt(s, 10, 16)
 
 	if err != nil {
 		ep.err = err
 		return 0
 	}
 
-	return uint16(n)
+	return int16(n)
 }
 
 type errParser struct {

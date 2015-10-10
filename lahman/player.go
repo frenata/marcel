@@ -2,8 +2,8 @@ package lahman
 
 type Player struct {
 	ID     string
-	Year   uint16
-	Stint  uint16
+	Year   int16
+	Stint  int16
 	Team   string
 	League string
 }

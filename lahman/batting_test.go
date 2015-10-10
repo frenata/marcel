@@ -14,7 +14,7 @@ var linetwo string = "addybo01,1871,1,RC1,NA,25,118,30,32,6,0,0,13,8,1,4,0,,,,,"
 func Test_BlankBatter(t *testing.T) {
 	blank := struct {
 		id          string
-		year, stint uint16
+		year, stint int16
 	}{"andrew", 2016, 0}
 
 	b, _ := lahman.NewBatter(blank.id, blank.year, blank.stint)
