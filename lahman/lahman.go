@@ -3,7 +3,11 @@ package lahman
 import "errors"
 
 // BattingYear returns all the records from a given year from a list of Batters.
-func BattingYear(year int16, lines []csvReader) ([]*Batter, error) {
+func BattingYear(year int16, file string) ([]*Batter, error) {
+	lines, err := ReadAll(file, Batter{})
+	if err != nil {
+		return nil, err
+	}
 	res := []*Batter{}
 	for _, l := range lines {
 		b, ok := l.(*Batter)
@@ -17,7 +21,11 @@ func BattingYear(year int16, lines []csvReader) ([]*Batter, error) {
 	return res, nil
 }
 
-func PitchingYear(year int16, lines []csvReader) ([]*Pitcher, error) {
+func PitchingYear(year int16, file string) ([]*Pitcher, error) {
+	lines, err := ReadAll(file, Pitcher{})
+	if err != nil {
+		return nil, err
+	}
 	res := []*Pitcher{}
 	for _, l := range lines {
 		p, ok := l.(*Pitcher)
