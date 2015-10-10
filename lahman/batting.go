@@ -3,19 +3,11 @@ package lahman
 import "strconv"
 
 type Batter struct {
-	Player
 	G, AB, R, H, H2, H3, HR, RBI, SB, CS, BB, SO, IBB, HBP, SH, SF, GIDP int16
 }
 
-func NewBatter(id string, year, stint int16) (*Batter, error) {
-	b := &Batter{Player: Player{ID: id, Year: year, Stint: stint}}
-	// search the db for the correct entry, fill in the data
-
-	return b, nil
-}
-
-func NewBatterCSV(r []string) (*Batter, error) {
-	b := &Batter{Player: Player{}}
+func NewBatterCSV(r []string) (*Player, error) {
+	b := &Player{Batter: Batter{}}
 	ep := &errParser{}
 
 	b.ID = r[0]

@@ -17,7 +17,7 @@ func Test_BlankBatter(t *testing.T) {
 		year, stint int16
 	}{"andrew", 2016, 0}
 
-	b, _ := lahman.NewBatter(blank.id, blank.year, blank.stint)
+	b, _ := lahman.NewPlayer(blank.id, blank.year, blank.stint)
 
 	switch {
 	case b.ID != blank.id:
@@ -53,7 +53,7 @@ func Test_Parsing(t *testing.T) {
 }
 
 // helper to test specific player line
-func checkLineTwo(b *lahman.Batter, err error, t *testing.T) {
+func checkLineTwo(b *lahman.Player, err error, t *testing.T) {
 	switch {
 	case err != nil:
 		t.Log(err)
