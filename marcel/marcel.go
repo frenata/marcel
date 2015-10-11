@@ -2,7 +2,6 @@ package marcel
 
 import (
 	"fmt"
-	"log"
 	"os"
 
 	"github.com/frenata/marcel/lahman"
@@ -23,34 +22,27 @@ func (p Player) String() string {
 	return fmt.Sprint(p.Batting)
 }
 
-func GetPitching(year int16) []*Player {
-	pityear, err := lahman.PitchingYear(year, pits)
-	if err != nil {
-		log.Fatal("wrong list of objects")
-	}
+func GetBatting(year int16) []*Player {
+	batyear := lahman.BattingYear(year)
 
-	p := make([]*Player, len(pityear))
+	p := make([]*Player, len(batyear))
 
-	for i, py := range pityear {
+	for i, by := range batyear {
 		p[i] = &Player{}
-		p[i].Pitching = py
+		p[i].Batting = by
 	}
 	return p
 }
 
-func GetBatting(year int16, players []*Player) []*Player {
-	batyear, err := lahman.BattingYear(year, bats)
-	if err != nil {
-		log.Fatal("wrong list of objects")
-	}
+func GetPitching(year int16, players []*Player) []*Player {
+	pityear := lahman.PitchingYear(year)
 
-	for _, by := range batyear {
+	for _, py := range pityear {
 		for _, p := range players {
-			if p.Pitching != nil &&
-				by.ID == p.Pitching.ID &&
-				by.Stint == p.Pitching.Stint &&
-				by.Year == p.Pitching.Year {
-				p.Batting = by
+			if py.ID == p.Batting.ID &&
+				py.Stint == p.Batting.Stint &&
+				py.Year == p.Batting.Year {
+				p.Pitching = py
 				break
 			}
 		}
@@ -59,8 +51,15 @@ func GetBatting(year int16, players []*Player) []*Player {
 }
 
 func GetYear(year int16) []*Player {
-	p := GetPitching(year)
-	p = GetBatting(year, p)
+	p := GetBatting(year)
+	p = GetPitching(year, p)
 
 	return p
+}
+
+func IsPosPitcher(p *Player) bool {
+	if p.Pitching != nil && p.Pitching.BFP < p.Batting.AB {
+		return true
+	}
+	return false
 }

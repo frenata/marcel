@@ -27,7 +27,8 @@ func main() {
 	for i := min; i <= max; i++ {
 		players := marcel.GetYear(int16(i))
 		for _, p := range players {
-			if p.Pitching != nil && p.Pitching.BFP < p.Batting.AB {
+			//if p.Pitching != nil && p.Pitching.BFP < p.Batting.AB {
+			if marcel.IsPosPitcher(p) {
 				pp = append(pp, p.Pitching)
 				count++
 				apps += p.Pitching.G
