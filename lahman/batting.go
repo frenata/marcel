@@ -5,6 +5,10 @@ import "fmt"
 // A Batter holds all the stats for a player's batting line
 type Batter struct {
 	player
+	BatStats
+}
+
+type BatStats struct {
 	G, AB, R, H, H2, H3, HR, RBI, SB, CS, BB, SO, IBB, HBP, SH, SF, GIDP int16
 }
 
@@ -17,10 +21,15 @@ func newBatter() *Batter {
 
 // String prints a Batter
 func (b Batter) String() string {
-	return fmt.Sprintf("%s,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d",
-		b.player, b.G, b.AB, b.R, b.H, b.H2, b.H3, b.HR, b.RBI, b.SB, b.CS,
-		b.BB, b.SO, b.IBB, b.HBP, b.SH, b.SF, b.GIDP)
+	return fmt.Sprintf("%s,%s",
+		b.player, b.BatStats)
 
+}
+
+func (b BatStats) String() string {
+	return fmt.Sprintf("%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d",
+		b.G, b.AB, b.R, b.H, b.H2, b.H3, b.HR, b.RBI, b.SB, b.CS,
+		b.BB, b.SO, b.IBB, b.HBP, b.SH, b.SF, b.GIDP)
 }
 
 // csvRead implements csvReader

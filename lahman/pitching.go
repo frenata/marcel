@@ -5,6 +5,10 @@ import "fmt"
 // A Pitcher holds all the stats for a player's pitching line
 type Pitcher struct {
 	player
+	PitchStats
+}
+
+type PitchStats struct {
 	W, L, G, GS, CG, SHO, SV, IPouts, H, ER, HR, BB,
 	SO, IBB, WP, HBP, BK, BFP, GF, R, SH, SF, GIDP int16
 	BAopp, ERA float32
@@ -12,11 +16,15 @@ type Pitcher struct {
 
 // String prints a Pitcher
 func (p Pitcher) String() string {
-	return fmt.Sprintf("%s,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%4.3f,%3.2f,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d",
-		p.player, p.W, p.L, p.G, p.GS, p.CG, p.SHO, p.SV, p.IPouts,
+	return fmt.Sprintf("%s,%s",
+		p.player, p.PitchStats)
+}
+
+func (p PitchStats) String() string {
+	return fmt.Sprintf("%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%4.3f,%3.2f,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d",
+		p.W, p.L, p.G, p.GS, p.CG, p.SHO, p.SV, p.IPouts,
 		p.H, p.ER, p.HR, p.BB, p.SO, p.BAopp, p.ERA, p.IBB, p.WP,
 		p.HBP, p.BK, p.BFP, p.GF, p.R, p.SH, p.SF, p.GIDP)
-
 }
 
 // csvRead implements csvReader
