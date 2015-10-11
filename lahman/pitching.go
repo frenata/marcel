@@ -10,8 +10,8 @@ type Pitcher struct {
 
 type PitchStats struct {
 	W, L, G, GS, CG, SHO, SV, IPouts, H, ER, HR, BB,
-	SO, IBB, WP, HBP, BK, BFP, GF, R, SH, SF, GIDP int16
-	BAopp, ERA float32
+	SO, IBB, WP, HBP, BK, BFP, GF, R, SH, SF, GIDP,
+	BAopp, ERA float64
 }
 
 // String prints a Pitcher
@@ -21,7 +21,10 @@ func (p Pitcher) String() string {
 }
 
 func (p PitchStats) String() string {
-	return fmt.Sprintf("%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%4.3f,%3.2f,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d",
+	return fmt.Sprintf(
+		"%.0f,%.0f,%.0f,%.0f,%.0f,%.0f,%.0f,%.0f,%.0f,%.0f,"+
+			"%.0f,%.0f,%.0f,%4.3f,%3.2f,%.0f,%.0f,%.0f,%.0f,%.0f,"+
+			"%.0f,%.0f,%.0f,%.0f,%.0f",
 		p.W, p.L, p.G, p.GS, p.CG, p.SHO, p.SV, p.IPouts,
 		p.H, p.ER, p.HR, p.BB, p.SO, p.BAopp, p.ERA, p.IBB, p.WP,
 		p.HBP, p.BK, p.BFP, p.GF, p.R, p.SH, p.SF, p.GIDP)
@@ -54,8 +57,8 @@ func (pit Pitcher) csvRead(line []string) (csvReader, error) {
 	p.HR = ep.parseStat(line[15])
 	p.BB = ep.parseStat(line[16])
 	p.SO = ep.parseStat(line[17])
-	p.BAopp = ep.parseFloat(line[18]) // float
-	p.ERA = ep.parseFloat(line[19])   // float
+	p.BAopp = ep.parseStat(line[18]) // float
+	p.ERA = ep.parseStat(line[19])   // float
 	p.IBB = ep.parseStat(line[20])
 	p.WP = ep.parseStat(line[21])
 	p.HBP = ep.parseStat(line[22])

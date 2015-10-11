@@ -6,7 +6,7 @@ import (
 	"github.com/frenata/marcel/marcel"
 )
 
-func League(year int16) (float64, float64) { // (bs lahman.BatStats) { //, ps lahman.PitchStats) {
+func League(year float64) (float64, float64) { // (bs lahman.BatStats) { //, ps lahman.PitchStats) {
 	players := marcel.GetYear(year)
 	var HR, PA, countB, countP float64
 
@@ -27,9 +27,9 @@ func League(year int16) (float64, float64) { // (bs lahman.BatStats) { //, ps la
 	return HR, PA
 }
 
-func Player(id string, year int16) (int16, int16) {
+func Player(id string, year float64) (float64, float64) {
 	players := marcel.GetYear(year)
-	var HR, PA int16
+	var HR, PA float64
 
 	for _, p := range players {
 		if p.Batting.ID == id && p.Batting.Year == year {

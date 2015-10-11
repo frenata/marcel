@@ -22,7 +22,7 @@ func (p Player) String() string {
 	return fmt.Sprint(p.Batting)
 }
 
-func GetBatting(year int16) []*Player {
+func GetBatting(year float64) []*Player {
 	batyear := lahman.BattingYear(year)
 
 	p := make([]*Player, len(batyear))
@@ -34,7 +34,7 @@ func GetBatting(year int16) []*Player {
 	return p
 }
 
-func GetPitching(year int16, players []*Player) []*Player {
+func GetPitching(year float64, players []*Player) []*Player {
 	pityear := lahman.PitchingYear(year)
 
 	for _, py := range pityear {
@@ -50,7 +50,7 @@ func GetPitching(year int16, players []*Player) []*Player {
 	return players
 }
 
-func GetYear(year int16) []*Player {
+func GetYear(year float64) []*Player {
 	p := GetBatting(year)
 	p = GetPitching(year, p)
 

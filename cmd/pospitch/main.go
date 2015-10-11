@@ -25,13 +25,13 @@ func main() {
 	pp := []*lahman.Pitcher{}
 
 	for i := min; i <= max; i++ {
-		players := marcel.GetYear(int16(i))
+		players := marcel.GetYear(float64(i))
 		for _, p := range players {
 			//if p.Pitching != nil && p.Pitching.BFP < p.Batting.AB {
 			if marcel.IsPosPitcher(p) {
 				pp = append(pp, p.Pitching)
 				count++
-				apps += p.Pitching.G
+				apps += int16(p.Pitching.G)
 			}
 		}
 	}

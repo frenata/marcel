@@ -17,6 +17,8 @@ func Test_BattingYear(t *testing.T) {
 	}
 
 	if res[len(res)-1].String() != tail {
+		t.Log(res[len(res)-1])
+		t.Log(tail)
 		t.Fatal("Last record does not match tail")
 	}
 }
@@ -30,6 +32,8 @@ func Test_PitchingYear(t *testing.T) {
 	}
 
 	if res[len(res)-1].String() != pitchtail {
+		t.Log(res[len(res)-1])
+		t.Log(pitchtail)
 		t.Fatal("Last record does not match tail")
 	}
 }

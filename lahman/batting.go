@@ -9,7 +9,7 @@ type Batter struct {
 }
 
 type BatStats struct {
-	G, AB, R, H, H2, H3, HR, RBI, SB, CS, BB, SO, IBB, HBP, SH, SF, GIDP int16
+	G, AB, R, H, H2, H3, HR, RBI, SB, CS, BB, SO, IBB, HBP, SH, SF, GIDP float64
 }
 
 /*
@@ -27,7 +27,7 @@ func (b Batter) String() string {
 }
 
 func (b BatStats) String() string {
-	return fmt.Sprintf("%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d",
+	return fmt.Sprintf("%.0f,%.0f,%.0f,%.0f,%.0f,%.0f,%.0f,%.0f,%.0f,%.0f,%.0f,%.0f,%.0f,%.0f,%.0f,%.0f,%.0f",
 		b.G, b.AB, b.R, b.H, b.H2, b.H3, b.HR, b.RBI, b.SB, b.CS,
 		b.BB, b.SO, b.IBB, b.HBP, b.SH, b.SF, b.GIDP)
 }

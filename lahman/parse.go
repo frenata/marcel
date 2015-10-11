@@ -10,6 +10,7 @@ type errParser struct {
 // helper function to parse a string into an int16
 // returns 0 if data is empty
 // stores an error in the errParser struct if there is one
+/*
 func (ep *errParser) parseStat(s string) int16 {
 	if s == "" {
 		return 0
@@ -23,6 +24,22 @@ func (ep *errParser) parseStat(s string) int16 {
 	}
 
 	return int16(n)
+}
+*/
+
+func (ep *errParser) parseStat(s string) float64 {
+	if s == "" {
+		return 0
+	}
+
+	n, err := strconv.ParseFloat(s, 64)
+
+	if err != nil {
+		ep.err = err
+		return 0
+	}
+
+	return n
 }
 
 func (ep *errParser) parseFloat(s string) float32 {

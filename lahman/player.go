@@ -6,8 +6,8 @@ import "fmt"
 // for embedding into more complete structs: Batter, Pitcher, Fielder
 type player struct {
 	ID     string
-	Year   int16
-	Stint  int16
+	Year   float64
+	Stint  float64
 	Team   string
 	League string
 }
@@ -22,7 +22,7 @@ func newPlayer(id string, year, stint int16) (*Player, error) {
 
 // print a player
 func (p player) String() string {
-	return fmt.Sprintf("%s,%d,%d,%s,%s",
+	return fmt.Sprintf("%s,%.0f,%.0f,%s,%s",
 		p.ID, p.Year, p.Stint, p.Team, p.League)
 
 }

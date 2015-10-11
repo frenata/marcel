@@ -26,7 +26,7 @@ func init() {
 	PitDB = pres
 }
 
-func BattingYear(year int16) []*Batter {
+func BattingYear(year float64) []*Batter {
 	res := []*Batter{}
 	for _, b := range BatDB {
 		if b.Year == year {
@@ -36,7 +36,7 @@ func BattingYear(year int16) []*Batter {
 	return res
 }
 
-func PitchingYear(year int16) []*Pitcher {
+func PitchingYear(year float64) []*Pitcher {
 	res := []*Pitcher{}
 	for _, p := range PitDB {
 		if p.Year == year {
