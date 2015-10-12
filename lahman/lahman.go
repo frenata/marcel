@@ -5,11 +5,17 @@ import (
 	"os"
 )
 
-var bats string = os.Getenv("GOPATH") + "/src/github.com/frenata/marcel/lahman/data/BattingPost.csv"
-var pits string = os.Getenv("GOPATH") + "/src/github.com/frenata/marcel/lahman/data/PitchingPost.csv"
+var master string = os.Getenv("GOPATH") + "/src/github.com/frenata/marcel/lahman/data/Master.csv"
+var bat string = os.Getenv("GOPATH") + "/src/github.com/frenata/marcel/lahman/data/Batting.csv"
+var pit string = os.Getenv("GOPATH") + "/src/github.com/frenata/marcel/lahman/data/Pitching.csv"
+var batP string = os.Getenv("GOPATH") + "/src/github.com/frenata/marcel/lahman/data/BattingPost.csv"
+var pitP string = os.Getenv("GOPATH") + "/src/github.com/frenata/marcel/lahman/data/PitchingPost.csv"
 
+var batPDB []*batter
+var pitPDB []*pitcher
 var batDB []*batter
 var pitDB []*pitcher
+var masDB map[string]Master
 
 // GetYear returns a list of all Players, with batting and pitching lines, for that year.
 func GetYear(year float64) []*Player {
@@ -21,6 +27,9 @@ func GetYear(year float64) []*Player {
 		players[i] = &Player{}
 		players[i].b = true
 		players[i].bio = b.bio
+		players[i].Mas = masDB[b.bio.ID]
+		players[i].bio.First = masDB[b.bio.ID][13]
+		players[i].bio.Last = masDB[b.bio.ID][14]
 		players[i].Bat = b.BatStats
 		for _, p := range pitchers {
 			if p.bio == b.bio {
@@ -38,11 +47,11 @@ func GetYear(year float64) []*Player {
 
 // initializes the pitching and batting databases into package variables
 func init() {
-	lines, err := ReadAll(bats, batter{})
+	// init the batter database
+	lines, err := ReadAll(batP, batter{})
 	if err != nil {
 		log.Fatal(err)
 	}
-	//fmt.Println("Batters loaded", len(lines))
 	res := []*batter{}
 	for _, l := range lines {
 		b := l.(*batter)
@@ -50,8 +59,8 @@ func init() {
 	}
 	batDB = res
 
-	plines, err := ReadAll(pits, pitcher{})
-	//fmt.Println("Pitchers loaded", len(plines))
+	// init the pitcher db
+	plines, err := ReadAll(pitP, pitcher{})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -61,6 +70,18 @@ func init() {
 		pres = append(pres, b)
 	}
 	pitDB = pres
+
+	// init the master database
+	masDB = make(map[string]Master)
+	mlines, err := ReadAll(master, Master{})
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, l := range mlines {
+		m := l.(Master)
+		masDB[m[0]] = m
+		//pres = append(pres, b)
+	}
 }
 
 // read the batting database and returns a list of batters for a given year
