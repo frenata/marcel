@@ -8,7 +8,7 @@ import (
 	"github.com/frenata/marcel/lahman"
 )
 
-var wiki2003 = "\nWiki Gonzalez,gonzawi01,2003,1,SDN,NL\n" +
+var wiki2003 = "Wiki Gonzalez,gonzawi01,2003,1,SDN,NL\n" +
 	"Batting:  24,65,1,13,5,0,0,10,0,0,5,13,1,1,1,1,3\n" +
 	"Pitching: 0,0,1,0,0,0,0,3,0,0,0,1,0,0.000,0.00,0,0,0,0,4,1,0,0,0,"
 
