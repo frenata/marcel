@@ -36,9 +36,9 @@ func Test_NewBatter(t *testing.T) {
 	line, _ := csv.NewReader(strings.NewReader(linetwo)).Read()
 
 	//b := newBatter()
-	b, err := Batter{}.csvRead(line)
+	b, err := batter{}.csvRead(line)
 
-	checkLineTwo(b.(*Batter), err, t)
+	checkLineTwo(b.(*batter), err, t)
 }
 
 // Test that bad input returns an error message.
@@ -46,7 +46,7 @@ func Test_Parsing(t *testing.T) {
 	linetwoerr := "addybo01,1871,bob,RC1,NA,25,118,30,32,6,0,0,13,8,1,4,0,,,,,"
 
 	line, _ := csv.NewReader(strings.NewReader(linetwoerr)).Read()
-	_, err := Batter{}.csvRead(line)
+	_, err := batter{}.csvRead(line)
 
 	if err == nil {
 		t.Log(err)
@@ -55,7 +55,7 @@ func Test_Parsing(t *testing.T) {
 }
 
 // helper to test specific player line
-func checkLineTwo(b *Batter, err error, t *testing.T) {
+func checkLineTwo(b *batter, err error, t *testing.T) {
 	switch {
 	case err != nil:
 		t.Log(err)

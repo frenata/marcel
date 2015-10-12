@@ -5,30 +5,57 @@ import "os"
 var bats string = os.Getenv("GOPATH") + "/src/github.com/frenata/marcel/lahman/data/Batting.csv"
 var pits string = os.Getenv("GOPATH") + "/src/github.com/frenata/marcel/lahman/data/Pitching.csv"
 
-var BatDB []*Batter
-var PitDB []*Pitcher
+var batDB []*batter
+var pitDB []*pitcher
 
+// GetYear returns a list of all Players, with batting and pitching lines, for that year.
+func GetYear(year float64) []*Player {
+	batters := battingYear(year)
+	pitchers := pitchingYear(year)
+	players := make([]*Player, len(batters))
+
+	for i, b := range batters {
+		players[i] = &Player{}
+		players[i].b = true
+		players[i].bio = b.bio
+		players[i].Bat = b.BatStats
+		for _, p := range pitchers {
+			if p.bio == b.bio {
+				players[i].Pit = p.PitchStats
+				players[i].p = true
+				if players[i].Pit.BFP() > players[i].Bat.AB() {
+					players[i].b = false
+				}
+				break
+			}
+		}
+	}
+	return players
+}
+
+// initializes the pitching and batting databases into package variables
 func init() {
-	lines, _ := ReadAll(bats, Batter{})
-	res := []*Batter{}
+	lines, _ := ReadAll(bats, batter{})
+	res := []*batter{}
 	for _, l := range lines {
-		b := l.(*Batter)
+		b := l.(*batter)
 		res = append(res, b)
 	}
-	BatDB = res
+	batDB = res
 
-	plines, _ := ReadAll(pits, Pitcher{})
-	pres := []*Pitcher{}
+	plines, _ := ReadAll(pits, pitcher{})
+	pres := []*pitcher{}
 	for _, l := range plines {
-		b := l.(*Pitcher)
+		b := l.(*pitcher)
 		pres = append(pres, b)
 	}
-	PitDB = pres
+	pitDB = pres
 }
 
-func BattingYear(year float64) []*Batter {
-	res := []*Batter{}
-	for _, b := range BatDB {
+// read the batting database and returns a list of batters for a given year
+func battingYear(year float64) []*batter {
+	res := []*batter{}
+	for _, b := range batDB {
 		if b.Year == year {
 			res = append(res, b)
 		}
@@ -36,51 +63,13 @@ func BattingYear(year float64) []*Batter {
 	return res
 }
 
-func PitchingYear(year float64) []*Pitcher {
-	res := []*Pitcher{}
-	for _, p := range PitDB {
+// read the pitching database and return a list of pitchers for a given year
+func pitchingYear(year float64) []*pitcher {
+	res := []*pitcher{}
+	for _, p := range pitDB {
 		if p.Year == year {
 			res = append(res, p)
 		}
 	}
 	return res
 }
-
-/*
-// BattingYear returns all the records from a given year from a list of Batters.
-func BattingYear(year int16, file string) ([]*Batter, error) {
-	lines, err := ReadAll(file, Batter{})
-	if err != nil {
-		return nil, err
-	}
-	res := []*Batter{}
-	for _, l := range lines {
-		b, ok := l.(*Batter)
-		if !ok {
-			return nil, errors.New("Not a list of Batting lines")
-		}
-		if b.Year == year {
-			res = append(res, b)
-		}
-	}
-	return res, nil
-}
-
-func PitchingYear(year int16, file string) ([]*Pitcher, error) {
-	lines, err := ReadAll(file, Pitcher{})
-	if err != nil {
-		return nil, err
-	}
-	res := []*Pitcher{}
-	for _, l := range lines {
-		p, ok := l.(*Pitcher)
-		if !ok {
-			return nil, errors.New("Not a list of Pitching lines")
-		}
-		if p.Year == year {
-			res = append(res, p)
-		}
-	}
-	return res, nil
-}
-*/
