@@ -8,14 +8,12 @@ type Batter struct {
 	BatStats
 }
 
-type BatStats struct {
-	G, AB, R, H, H2, H3, HR, RBI, SB, CS, BB, SO, IBB, HBP, SH, SF, GIDP float64
-}
+// array of the 17 lahman stats + PA
+type BatStats [18]float64
 
 /*
-func newBatter() *Batter {
-	b := &Batter{player: player{}}
-	return b
+type BatStats struct {
+	G, AB, R, H, H2, H3, HR, RBI, SB, CS, BB, SO, IBB, HBP, SH, SF, GIDP float64
 }
 */
 
@@ -27,10 +25,21 @@ func (b Batter) String() string {
 }
 
 func (b BatStats) String() string {
+	var s string
+
+	for i := 1; i < len(b); i++ {
+		s += fmt.Sprintf("%.0f,", b[i])
+	}
+	return s[:len(s)-1]
+}
+
+/*
+func (b BatStats) String() string {
 	return fmt.Sprintf("%.0f,%.0f,%.0f,%.0f,%.0f,%.0f,%.0f,%.0f,%.0f,%.0f,%.0f,%.0f,%.0f,%.0f,%.0f,%.0f,%.0f",
 		b.G, b.AB, b.R, b.H, b.H2, b.H3, b.HR, b.RBI, b.SB, b.CS,
 		b.BB, b.SO, b.IBB, b.HBP, b.SH, b.SF, b.GIDP)
 }
+*/
 
 // csvRead implements csvReader
 // It reads from a csv line, and returns an instance of a Batter object.
@@ -46,23 +55,12 @@ func (bat Batter) csvRead(line []string) (csvReader, error) {
 	b.Stint = ep.parseStat(line[2])
 	b.Team = line[3]
 	b.League = line[4]
-	b.G = ep.parseStat(line[5])
-	b.AB = ep.parseStat(line[6])
-	b.R = ep.parseStat(line[7])
-	b.H = ep.parseStat(line[8])
-	b.H2 = ep.parseStat(line[9])
-	b.H3 = ep.parseStat(line[10])
-	b.HR = ep.parseStat(line[11])
-	b.RBI = ep.parseStat(line[12])
-	b.SB = ep.parseStat(line[13])
-	b.CS = ep.parseStat(line[14])
-	b.BB = ep.parseStat(line[15])
-	b.SO = ep.parseStat(line[16])
-	b.IBB = ep.parseStat(line[17])
-	b.HBP = ep.parseStat(line[18])
-	b.SH = ep.parseStat(line[19])
-	b.SF = ep.parseStat(line[20])
-	b.GIDP = ep.parseStat(line[21])
+
+	for i := 1; i < len(b.BatStats); i++ {
+		b.BatStats[i] = ep.parseStat(line[i+4])
+	}
+
+	b.BatStats[0] = b.BatStats[2] + b.BatStats[11] + b.BatStats[14] + b.BatStats[15] + b.BatStats[16]
 
 	if ep.err != nil {
 		return nil, ep.err
@@ -70,3 +68,23 @@ func (bat Batter) csvRead(line []string) (csvReader, error) {
 
 	return b, nil
 }
+
+// Convenience methods to return the named stat instead of needing to know the index.
+func (b Batter) PA() float64   { return b.BatStats[0] }
+func (b Batter) G() float64    { return b.BatStats[1] }
+func (b Batter) AB() float64   { return b.BatStats[2] }
+func (b Batter) R() float64    { return b.BatStats[3] }
+func (b Batter) H() float64    { return b.BatStats[4] }
+func (b Batter) H2() float64   { return b.BatStats[5] }
+func (b Batter) H3() float64   { return b.BatStats[6] }
+func (b Batter) HR() float64   { return b.BatStats[7] }
+func (b Batter) RBI() float64  { return b.BatStats[8] }
+func (b Batter) SB() float64   { return b.BatStats[9] }
+func (b Batter) CS() float64   { return b.BatStats[10] }
+func (b Batter) BB() float64   { return b.BatStats[11] }
+func (b Batter) SO() float64   { return b.BatStats[12] }
+func (b Batter) IBB() float64  { return b.BatStats[13] }
+func (b Batter) HBP() float64  { return b.BatStats[14] }
+func (b Batter) SH() float64   { return b.BatStats[15] }
+func (b Batter) SF() float64   { return b.BatStats[16] }
+func (b Batter) GIDP() float64 { return b.BatStats[17] }

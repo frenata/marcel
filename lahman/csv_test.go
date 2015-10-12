@@ -67,11 +67,11 @@ func Test_ReadFull(t *testing.T) {
 		t.Log("Team: ", b.Team)
 		t.Fatal("Incorrectly parsed Team")
 		fallthrough
-	case b.HR != 22:
+	case b.HR() != 22:
 		t.Log("Homeruns: ", b.HR)
 		t.Fatal("Incorrectly parsed HR")
 		fallthrough
-	case b.SF != 4:
+	case b.SF() != 4:
 		t.Log("SF: ", b.SF)
 		t.Fatal("Incorrectly parsed SF")
 	}
