@@ -17,7 +17,7 @@ func Test_PitchPrint(t *testing.T) {
 	line, _ = r.Read()
 	line, _ = r.Read()
 
-	p, err := Pitcher{}.csvRead(line)
+	p, err := pitcher{}.csvRead(line)
 	_ = fmt.Sprint(p)
 }
 
@@ -33,8 +33,8 @@ func Test_ParseCSV(t *testing.T) {
 	player, _ = r.Read()  // dispose of second line
 	player, _ = r.Read()
 
-	b, err := Batter{}.csvRead(player)
-	checkLineTwo(b.(*Batter), err, t)
+	b, err := batter{}.csvRead(player)
+	checkLineTwo(b.(*batter), err, t)
 }
 
 // test csv read when given bad file name
@@ -47,13 +47,13 @@ func Test_BadFile(t *testing.T) {
 
 // test read full file, check last line
 func Test_ReadFull(t *testing.T) {
-	batters, err := ReadAll("data/Batting.csv", Batter{})
+	batters, err := ReadAll("data/Batting.csv", batter{})
 	if err != nil {
 		t.Fatal("error reading full file")
 	}
 	//	fmt.Println(batters[len(batters)-1])
 
-	b := batters[len(batters)-1].(*Batter)
+	b := batters[len(batters)-1].(*batter)
 	// add checks for last batter
 	switch {
 	case err != nil:
@@ -67,11 +67,11 @@ func Test_ReadFull(t *testing.T) {
 		t.Log("Team: ", b.Team)
 		t.Fatal("Incorrectly parsed Team")
 		fallthrough
-	case b.HR != 22:
+	case b.HR() != 22:
 		t.Log("Homeruns: ", b.HR)
 		t.Fatal("Incorrectly parsed HR")
 		fallthrough
-	case b.SF != 4:
+	case b.SF() != 4:
 		t.Log("SF: ", b.SF)
 		t.Fatal("Incorrectly parsed SF")
 	}
@@ -79,13 +79,13 @@ func Test_ReadFull(t *testing.T) {
 
 // test read full file, check last line
 func Test_ReadFullPitch(t *testing.T) {
-	pitchers, err := ReadAll("data/Pitching.csv", Pitcher{})
+	pitchers, err := ReadAll("data/Pitching.csv", pitcher{})
 	if err != nil {
 		t.Log(err)
 		t.Fatal("error reading full file")
 	}
 
-	p := pitchers[len(pitchers)-1].(*Pitcher)
+	p := pitchers[len(pitchers)-1].(*pitcher)
 	// add checks for last batter
 	switch {
 	case err != nil:
@@ -99,11 +99,11 @@ func Test_ReadFullPitch(t *testing.T) {
 		t.Log("Team: ", p.Team)
 		t.Fatal("Incorrectly parsed Team")
 		fallthrough
-	case p.HR != 13:
+	case p.HR() != 13:
 		t.Log("Homeruns: ", p.HR)
 		t.Fatal("Incorrectly parsed HR")
 		fallthrough
-	case p.SF != 3:
+	case p.SF() != 3:
 		t.Log("SF: ", p.SF)
 		t.Fatal("Incorrectly parsed SF")
 	}

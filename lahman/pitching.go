@@ -3,73 +3,83 @@ package lahman
 import "fmt"
 
 // A Pitcher holds all the stats for a player's pitching line
-type Pitcher struct {
-	player
+type pitcher struct {
+	bio
 	PitchStats
 }
 
-type PitchStats struct {
-	W, L, G, GS, CG, SHO, SV, IPouts, H, ER, HR, BB,
-	SO, IBB, WP, HBP, BK, BFP, GF, R, SH, SF, GIDP int16
-	BAopp, ERA float32
+type PitchStats [25]float64
+
+func (p PitchStats) String() string {
+	var s string
+
+	for i := 0; i < len(p); i++ {
+		var s2 string
+		switch {
+		case p[i] == -1:
+			s2 = ","
+		case i == 13: // BAopp
+			s2 = fmt.Sprintf("%4.3f,", p[i])
+		case i == 14: // ERA
+			s2 = fmt.Sprintf("%3.2f,", p[i])
+		default:
+			s2 = fmt.Sprintf("%.0f,", p[i])
+		}
+		s += s2
+	}
+	return s[:len(s)-1]
 }
 
 // String prints a Pitcher
-func (p Pitcher) String() string {
+func (p pitcher) String() string {
 	return fmt.Sprintf("%s,%s",
-		p.player, p.PitchStats)
+		p.bio, p.PitchStats)
 }
 
-func (p PitchStats) String() string {
-	return fmt.Sprintf("%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%4.3f,%3.2f,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d",
-		p.W, p.L, p.G, p.GS, p.CG, p.SHO, p.SV, p.IPouts,
-		p.H, p.ER, p.HR, p.BB, p.SO, p.BAopp, p.ERA, p.IBB, p.WP,
-		p.HBP, p.BK, p.BFP, p.GF, p.R, p.SH, p.SF, p.GIDP)
-}
-
-// csvRead implements csvReader
-// It reads from a csv line, and returns an instance of a Pitcher object.
-// Example of use:
-//      p, err := Pitcher{}.csvRead(line)
-func (pit Pitcher) csvRead(line []string) (csvReader, error) {
-
-	p := &Pitcher{player: player{}}
+func (pit pitcher) csvRead(line []string) (csvReader, error) {
+	p := &pitcher{bio: bio{}}
 	ep := &errParser{}
 
 	p.ID = line[0]
 	p.Year = ep.parseStat(line[1])
-	p.Stint = ep.parseStat(line[2])
+	p.Stint = line[2] // ep.parseStat(line[2])
 	p.Team = line[3]
 	p.League = line[4]
-	p.W = ep.parseStat(line[5])
-	p.L = ep.parseStat(line[6])
-	p.G = ep.parseStat(line[7])
-	p.GS = ep.parseStat(line[8])
-	p.CG = ep.parseStat(line[9])
-	p.SHO = ep.parseStat(line[10])
-	p.SV = ep.parseStat(line[11])
-	p.IPouts = ep.parseStat(line[12])
-	p.H = ep.parseStat(line[13])
-	p.ER = ep.parseStat(line[14])
-	p.HR = ep.parseStat(line[15])
-	p.BB = ep.parseStat(line[16])
-	p.SO = ep.parseStat(line[17])
-	p.BAopp = ep.parseFloat(line[18]) // float
-	p.ERA = ep.parseFloat(line[19])   // float
-	p.IBB = ep.parseStat(line[20])
-	p.WP = ep.parseStat(line[21])
-	p.HBP = ep.parseStat(line[22])
-	p.BK = ep.parseStat(line[23])
-	p.BFP = ep.parseStat(line[24])
-	p.GF = ep.parseStat(line[25])
-	p.R = ep.parseStat(line[26])
-	p.SH = ep.parseStat(line[27])
-	p.SF = ep.parseStat(line[28])
-	p.GIDP = ep.parseStat(line[29])
+
+	for i := 0; i < len(p.PitchStats); i++ {
+		p.PitchStats[i] = ep.parseStat(line[i+5])
+	}
 
 	if ep.err != nil {
+		//fmt.Println(ep.err)
 		return nil, ep.err
 	}
 
 	return p, nil
 }
+
+func (p PitchStats) W() float64      { return p[0] }
+func (p PitchStats) L() float64      { return p[1] }
+func (p PitchStats) G() float64      { return p[2] }
+func (p PitchStats) GS() float64     { return p[3] }
+func (p PitchStats) CG() float64     { return p[4] }
+func (p PitchStats) SHO() float64    { return p[5] }
+func (p PitchStats) SV() float64     { return p[6] }
+func (p PitchStats) IPouts() float64 { return p[7] }
+func (p PitchStats) H() float64      { return p[8] }
+func (p PitchStats) ER() float64     { return p[9] }
+func (p PitchStats) HR() float64     { return p[10] }
+func (p PitchStats) BB() float64     { return p[11] }
+func (p PitchStats) SO() float64     { return p[12] }
+func (p PitchStats) BAopp() float64  { return p[13] }
+func (p PitchStats) ERA() float64    { return p[14] }
+func (p PitchStats) IBB() float64    { return p[15] }
+func (p PitchStats) WP() float64     { return p[16] }
+func (p PitchStats) HBP() float64    { return p[17] }
+func (p PitchStats) BK() float64     { return p[18] }
+func (p PitchStats) BFP() float64    { return p[19] }
+func (p PitchStats) GF() float64     { return p[20] }
+func (p PitchStats) R() float64      { return p[21] }
+func (p PitchStats) SH() float64     { return p[22] }
+func (p PitchStats) SF() float64     { return p[23] }
+func (p PitchStats) GIDP() float64   { return p[24] }
