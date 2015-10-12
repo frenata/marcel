@@ -25,7 +25,12 @@ func (b BatStats) String() string {
 	var s string
 
 	for i := 1; i < len(b); i++ {
-		s += fmt.Sprintf("%.0f,", b[i])
+		switch {
+		case b[i] == -1:
+			s += ","
+		default:
+			s += fmt.Sprintf("%.0f,", b[i])
+		}
 	}
 	return s[:len(s)-1]
 }
@@ -56,9 +61,11 @@ func (bat batter) csvRead(line []string) (csvReader, error) {
 		b.League = line[4]
 	}
 
-	for i := 1; i < len(b.BatStats); i++ {
+	for i := 1; i < len(b.BatStats); i++ { // len(b.BatStats)-1; i++ {
 		b.BatStats[i] = ep.parseStat(line[i+4])
 	}
+
+	//b.BatStats[17] = 99
 
 	b.BatStats[0] = b.BatStats[2] + b.BatStats[11] + b.BatStats[14] + b.BatStats[15] + b.BatStats[16]
 

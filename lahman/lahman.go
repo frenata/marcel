@@ -6,8 +6,8 @@ import (
 )
 
 var master string = os.Getenv("GOPATH") + "/src/github.com/frenata/marcel/lahman/data/Master.csv"
-var bat string = os.Getenv("GOPATH") + "/src/github.com/frenata/marcel/lahman/data/Batting.csv"
-var pit string = os.Getenv("GOPATH") + "/src/github.com/frenata/marcel/lahman/data/Pitching.csv"
+var batR string = os.Getenv("GOPATH") + "/src/github.com/frenata/marcel/lahman/data/Batting.csv"
+var pitR string = os.Getenv("GOPATH") + "/src/github.com/frenata/marcel/lahman/data/Pitching.csv"
 var batP string = os.Getenv("GOPATH") + "/src/github.com/frenata/marcel/lahman/data/BattingPost.csv"
 var pitP string = os.Getenv("GOPATH") + "/src/github.com/frenata/marcel/lahman/data/PitchingPost.csv"
 
@@ -48,19 +48,19 @@ func GetYear(year float64) []*Player {
 // initializes the pitching and batting databases into package variables
 func init() {
 	// init the batter database
-	lines, err := ReadAll(batP, batter{})
+	blines, err := ReadAll(batR, batter{})
 	if err != nil {
 		log.Fatal(err)
 	}
-	res := []*batter{}
-	for _, l := range lines {
+	bres := []*batter{}
+	for _, l := range blines {
 		b := l.(*batter)
-		res = append(res, b)
+		bres = append(bres, b)
 	}
-	batDB = res
+	batDB = bres
 
 	// init the pitcher db
-	plines, err := ReadAll(pitP, pitcher{})
+	plines, err := ReadAll(pitR, pitcher{})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -70,6 +70,30 @@ func init() {
 		pres = append(pres, b)
 	}
 	pitDB = pres
+
+	// init the postseason batter database
+	blines, err = ReadAll(batP, batter{})
+	if err != nil {
+		log.Fatal(err)
+	}
+	bres = []*batter{}
+	for _, l := range blines {
+		b := l.(*batter)
+		bres = append(bres, b)
+	}
+	batPDB = bres
+
+	// init the postseason pitcher db
+	plines, err = ReadAll(pitP, pitcher{})
+	if err != nil {
+		log.Fatal(err)
+	}
+	pres = []*pitcher{}
+	for _, l := range plines {
+		b := l.(*pitcher)
+		pres = append(pres, b)
+	}
+	pitPDB = pres
 
 	// init the master database
 	masDB = make(map[string]Master)

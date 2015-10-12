@@ -50,11 +50,11 @@ func checkPitchTwo(p *pitcher, err error, t *testing.T) {
 		t.Fatal("Incorrectly parsed League")
 		fallthrough
 	case p.H() != 361:
-		t.Log("Hits: ", p.H)
+		t.Log("Hits: ", p.H())
 		t.Fatal("Incorrectly parsed Hits")
 		fallthrough
-	case p.GIDP() != 0:
-		t.Log("GIDP: ", p.GIDP)
+	case p.GIDP() != -1:
+		t.Log("GIDP: ", p.GIDP())
 		t.Fatal("Incorrectly parsed GIDP")
 	}
 }

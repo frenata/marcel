@@ -15,10 +15,12 @@ func (p PitchStats) String() string {
 
 	for i := 0; i < len(p); i++ {
 		var s2 string
-		switch i {
-		case 13: // BAopp
+		switch {
+		case p[i] == -1:
+			s2 = ","
+		case i == 13: // BAopp
 			s2 = fmt.Sprintf("%4.3f,", p[i])
-		case 14: // ERA
+		case i == 14: // ERA
 			s2 = fmt.Sprintf("%3.2f,", p[i])
 		default:
 			s2 = fmt.Sprintf("%.0f,", p[i])

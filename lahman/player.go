@@ -48,7 +48,7 @@ func (p Player) String() string {
 	if p.p {
 		s += "\nPitching: " + p.Pit.String()
 	}
-	return s
+	return "\n" + s
 }
 
 // Master lists biographical data fromt he Master database
