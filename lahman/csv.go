@@ -24,7 +24,7 @@ func newReader(file string) (*csv.Reader, error) {
 }
 
 // ReadAll reads all the lines from a csv file and creates a list of objects from that file.
-func ReadAll(file string, c csvReader) ([]csvReader, error) {
+func readAll(file string, c csvReader) ([]csvReader, error) {
 	r, err := newReader(file)
 	if err != nil {
 		return nil, err

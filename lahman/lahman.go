@@ -9,7 +9,7 @@ type batDB []*batter
 type pitDB []*pitcher
 
 var (
-	master       string = os.Getenv("GOPATH") + "/src/github.com/frenata/marcel/lahman/data/Master.csv"
+	masterCsv    string = os.Getenv("GOPATH") + "/src/github.com/frenata/marcel/lahman/data/Master.csv"
 	batting      string = os.Getenv("GOPATH") + "/src/github.com/frenata/marcel/lahman/data/Batting.csv"
 	pitching     string = os.Getenv("GOPATH") + "/src/github.com/frenata/marcel/lahman/data/Pitching.csv"
 	battingPost  string = os.Getenv("GOPATH") + "/src/github.com/frenata/marcel/lahman/data/BattingPost.csv"
@@ -19,7 +19,7 @@ var (
 	pitPostDB    pitDB
 	batRegularDB batDB
 	pitRegularDB pitDB
-	masterDB     map[string]Master
+	masterDB     map[string]master
 )
 
 // GetYear returns a list of all Players, with batting and pitching lines, for that year.
@@ -46,9 +46,7 @@ func getData(year float64, bat batDB, pit pitDB) []*Player {
 		players[i] = &Player{}
 		players[i].b = true
 		players[i].bio = b.bio
-		players[i].Mas = masterDB[b.bio.ID]
-		players[i].bio.First = masterDB[b.bio.ID][13]
-		players[i].bio.Last = masterDB[b.bio.ID][14]
+		players[i].master = masterDB[b.bio.ID]
 		players[i].Bat = b.BatStats
 		for _, p := range pitchers {
 			if p.bio == b.bio {
@@ -95,19 +93,19 @@ func init() {
 	pitPostDB = initPit(pitchingPost)
 
 	// init the master database
-	masterDB = make(map[string]Master)
-	mlines, err := ReadAll(master, Master{})
+	masterDB = make(map[string]master)
+	lines, err := readAll(masterCsv, master{})
 	if err != nil {
 		log.Fatal(err)
 	}
-	for _, l := range mlines {
-		m := l.(Master)
+	for _, l := range lines {
+		m := l.(master)
 		masterDB[m[0]] = m
 	}
 }
 
 func initBat(file string) (results []*batter) {
-	lines, err := ReadAll(file, batter{})
+	lines, err := readAll(file, batter{})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -119,7 +117,7 @@ func initBat(file string) (results []*batter) {
 }
 
 func initPit(file string) (results []*pitcher) {
-	lines, err := ReadAll(file, pitcher{})
+	lines, err := readAll(file, pitcher{})
 	if err != nil {
 		log.Fatal(err)
 	}

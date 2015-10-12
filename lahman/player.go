@@ -10,27 +10,19 @@ type bio struct {
 	Stint  string
 	Team   string
 	League string
-	First  string
-	Last   string
 }
 
 // String prints biographical information about a player.
 func (p bio) String() string {
-	var name string
-	if p.First != "" && p.Last != "" {
-		name = fmt.Sprintf("%s %s,", p.First, p.Last)
-	}
-	basics := fmt.Sprintf("%s,%.0f,%s,%s,%s", p.ID, p.Year, p.Stint, p.Team, p.League)
-	return name + basics
+	return fmt.Sprintf("%s,%.0f,%s,%s,%s", p.ID, p.Year, p.Stint, p.Team, p.League)
 }
 
 // A Player is a struct that contains all batting and pitching stats for a player.
 type Player struct {
-	bio
 	Bat BatStats
 	Pit PitchStats
-	Mas Master
-
+	bio
+	master
 	p, b bool // p is true if player pitched, b is true if player batted and did *not* pitch
 }
 
@@ -41,7 +33,11 @@ func (p Player) IsPosPitcher() bool {
 
 // String prints a player's information
 func (p Player) String() string {
-	s := p.bio.String()
+	var name string
+	if f, l := p.FirstName(), p.LastName(); f != "" && l != "" {
+		name = fmt.Sprintf("%s %s,", f, l)
+	}
+	s := name + p.bio.String()
 	if p.b {
 		s += "\nBatting:  " + p.Bat.String()
 	}
@@ -52,11 +48,11 @@ func (p Player) String() string {
 }
 
 // Master lists biographical data fromt he Master database
-type Master [24]string
+type master [24]string
 
 //csvRead pulls data from a csv file into a Master object
-func (mas Master) csvRead(line []string) (csvReader, error) {
-	m := Master{}
+func (mas master) csvRead(line []string) (csvReader, error) {
+	m := master{}
 
 	for i := 0; i < len(line); i++ {
 		m[i] = line[i]
@@ -64,3 +60,6 @@ func (mas Master) csvRead(line []string) (csvReader, error) {
 
 	return m, nil
 }
+
+func (m master) FirstName() string { return m[13] }
+func (m master) LastName() string  { return m[14] }
