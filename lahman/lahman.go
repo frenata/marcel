@@ -34,9 +34,9 @@ func getWhich(year int, which string) []*Player {
 	case "postseason":
 		return getData(year, batPostDB, pitPostDB)
 	case "regular":
-		return getData(year, batRegularDB, pitRegularDB)
+		fallthrough
 	default:
-		return nil
+		return getData(year, batRegularDB, pitRegularDB)
 	}
 }
 

@@ -40,7 +40,6 @@ func readAll(file string, c csvReader) ([]csvReader, error) {
 	for i, l := range lines {
 		b, err := c.csvRead(l)
 		if err != nil {
-			//fmt.Println(err)
 			return nil, err
 		}
 		results[i] = b

@@ -28,3 +28,20 @@ func Test_GetYear(t *testing.T) {
 		}
 	}
 }
+
+func Test_GetPostYear(t *testing.T) {
+	players := lahman.GetPostYear(2010)
+
+	for _, p := range players {
+		if p.Pit.SHO() > 0 && p.Pit.H() == 0 { // Roy Halladay 2010
+			if p.Year() != 2010 {
+				t.Log(p.Year())
+				t.Fatal("Year should be 2010")
+			}
+			if p.Stint() != "NLDS1" {
+				t.Log(p.Stint())
+				t.Fatal("Stint should be NLDS1")
+			}
+		}
+	}
+}
