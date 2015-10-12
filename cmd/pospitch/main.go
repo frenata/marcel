@@ -6,7 +6,6 @@ import (
 	"strconv"
 
 	"github.com/frenata/marcel/lahman"
-	"github.com/frenata/marcel/marcel"
 )
 
 func main() {
@@ -22,16 +21,16 @@ func main() {
 
 	count := 0
 	var apps int16 = 0
-	pp := []*lahman.Pitcher{}
+	pp := []*lahman.Player{}
 
 	for i := min; i <= max; i++ {
-		players := marcel.GetYear(float64(i))
+		players := lahman.GetYear(float64(i))
 		for _, p := range players {
 			//if p.Pitching != nil && p.Pitching.BFP < p.Batting.AB {
-			if marcel.IsPosPitcher(p) {
-				pp = append(pp, p.Pitching)
+			if p.IsPosPitcher() {
+				pp = append(pp, p)
 				count++
-				apps += int16(p.Pitching.G)
+				apps += int16(p.Pit.G())
 			}
 		}
 	}
