@@ -2,14 +2,10 @@ package lahman
 
 import "fmt"
 
-// A Pitcher holds all the stats for a player's pitching line
-type pitcher struct {
-	bio
-	PitchStats
-}
-
+// PitchStats is an array that holds the 25 tracked pitching statistics for a Player.
 type PitchStats [25]float64
 
+// String returns a list of the 25 pitching stats, formatted correctly.
 func (p PitchStats) String() string {
 	var s string
 
@@ -30,34 +26,7 @@ func (p PitchStats) String() string {
 	return s[:len(s)-1]
 }
 
-// String prints a Pitcher
-func (p pitcher) String() string {
-	return fmt.Sprintf("%s,%s",
-		p.bio, p.PitchStats)
-}
-
-func (pit pitcher) csvRead(line []string) (csvReader, error) {
-	p := &pitcher{bio: bio{}}
-	ep := &errParser{}
-
-	p.ID = line[0]
-	p.Year = ep.parseStat(line[1])
-	p.Stint = line[2] // ep.parseStat(line[2])
-	p.Team = line[3]
-	p.League = line[4]
-
-	for i := 0; i < len(p.PitchStats); i++ {
-		p.PitchStats[i] = ep.parseStat(line[i+5])
-	}
-
-	if ep.err != nil {
-		//fmt.Println(ep.err)
-		return nil, ep.err
-	}
-
-	return p, nil
-}
-
+// W, etc, return the Player's named pitching stat.
 func (p PitchStats) W() float64      { return p[0] }
 func (p PitchStats) L() float64      { return p[1] }
 func (p PitchStats) G() float64      { return p[2] }
@@ -83,3 +52,37 @@ func (p PitchStats) R() float64      { return p[21] }
 func (p PitchStats) SH() float64     { return p[22] }
 func (p PitchStats) SF() float64     { return p[23] }
 func (p PitchStats) GIDP() float64   { return p[24] }
+
+// A Pitcher holds all the stats for a player's pitching line
+type pitcher struct {
+	bio
+	PitchStats
+}
+
+// String prints a Pitcher
+func (p pitcher) String() string {
+	return fmt.Sprintf("%s,%s",
+		p.bio, p.PitchStats)
+}
+
+// creates a pitcher by reading from a line of a csv file
+func (pit pitcher) csvRead(line []string) (csvReader, error) {
+	p := &pitcher{bio: bio{}}
+	ep := &errParser{}
+
+	p.id = line[0]
+	p.year = ep.parseStat(line[1])
+	p.stint = line[2]
+	p.team = line[3]
+	p.league = line[4]
+
+	for i := 0; i < len(p.PitchStats); i++ {
+		p.PitchStats[i] = ep.parseStat(line[i+5])
+	}
+
+	if ep.err != nil {
+		return nil, ep.err
+	}
+
+	return p, nil
+}

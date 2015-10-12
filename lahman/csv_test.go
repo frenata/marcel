@@ -59,11 +59,11 @@ func Test_ReadFull(t *testing.T) {
 	case err != nil:
 		t.Log(err)
 		t.Fatal("Parsing error")
-	case b.ID != "zuninmi01":
+	case b.ID() != "zuninmi01":
 		t.Log("ID: ", b.ID)
 		t.Fatal("Incorrectly parsed ID")
 		fallthrough
-	case b.Team != "SEA":
+	case b.Team() != "SEA":
 		t.Log("Team: ", b.Team)
 		t.Fatal("Incorrectly parsed Team")
 		fallthrough
@@ -91,11 +91,11 @@ func Test_ReadFullPitch(t *testing.T) {
 	case err != nil:
 		t.Log(err)
 		t.Fatal("Parsing error")
-	case p.ID != "zimmejo02":
+	case p.ID() != "zimmejo02":
 		t.Log("ID: ", p.ID)
 		t.Fatal("Incorrectly parsed ID")
 		fallthrough
-	case p.Team != "WAS":
+	case p.Team() != "WAS":
 		t.Log("Team: ", p.Team)
 		t.Fatal("Incorrectly parsed Team")
 		fallthrough

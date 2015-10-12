@@ -22,10 +22,13 @@ var (
 	masterDB     map[string]master
 )
 
-// GetYear returns a list of all Players, with batting and pitching lines, for that year.
-func GetYear(year int) []*Player     { return getWhich(year, "regular") }
+// GetYear returns a list of all Players, with batting and pitching lines, for the regular season that year.
+func GetYear(year int) []*Player { return getWhich(year, "regular") }
+
+// GetPostYear returns a list of all Players, with batting and pitching lines, for postseason that year.
 func GetPostYear(year int) []*Player { return getWhich(year, "postseason") }
 
+// getWhich picks what databases to read based on the helper function that calls it.
 func getWhich(year int, which string) []*Player {
 	switch which {
 	case "postseason":
@@ -37,6 +40,8 @@ func getWhich(year int, which string) []*Player {
 	}
 }
 
+// getData reads battings and pitching data from a given database, merges any duplicate players together,
+// and returns the list.
 func getData(year int, bat batDB, pit pitDB) []*Player {
 	batters := battingYear(year, bat)
 	pitchers := pitchingYear(year, pit)
@@ -46,7 +51,7 @@ func getData(year int, bat batDB, pit pitDB) []*Player {
 		players[i] = &Player{}
 		players[i].b = true
 		players[i].bio = b.bio
-		players[i].master = masterDB[b.bio.ID]
+		players[i].master = masterDB[b.bio.id]
 		players[i].Bat = b.BatStats
 		for _, p := range pitchers {
 			if p.bio == b.bio {
@@ -66,7 +71,7 @@ func getData(year int, bat batDB, pit pitDB) []*Player {
 func battingYear(year int, bat batDB) []*batter {
 	res := []*batter{}
 	for _, b := range bat {
-		if b.Year == float64(year) {
+		if b.year == float64(year) {
 			res = append(res, b)
 		}
 	}
@@ -77,7 +82,7 @@ func battingYear(year int, bat batDB) []*batter {
 func pitchingYear(year int, pit pitDB) []*pitcher {
 	res := []*pitcher{}
 	for _, p := range pit {
-		if p.Year == float64(year) {
+		if p.year == float64(year) {
 			res = append(res, p)
 		}
 	}
@@ -104,6 +109,7 @@ func init() {
 	}
 }
 
+// initializes a batting database
 func initBat(file string) (results []*batter) {
 	lines, err := readAll(file, batter{})
 	if err != nil {
@@ -116,6 +122,7 @@ func initBat(file string) (results []*batter) {
 	return results
 }
 
+// initializes a pitching database
 func initPit(file string) (results []*pitcher) {
 	lines, err := readAll(file, pitcher{})
 	if err != nil {

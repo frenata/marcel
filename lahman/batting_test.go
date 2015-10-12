@@ -42,11 +42,11 @@ func checkLineTwo(b *batter, err error, t *testing.T) {
 	case err != nil:
 		t.Log(err)
 		t.Fatal("Parsing error")
-	case b.ID != "addybo01":
+	case b.ID() != "addybo01":
 		t.Log("ID: ", b.ID)
 		t.Fatal("Incorrectly parsed ID")
 		fallthrough
-	case b.League != "NA":
+	case b.League() != "NA":
 		t.Log("League: ", b.League)
 		t.Fatal("Incorrectly parsed League")
 		fallthrough

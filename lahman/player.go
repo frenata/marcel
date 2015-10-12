@@ -2,21 +2,6 @@ package lahman
 
 import "fmt"
 
-// struct that list the unique identifying information for a given player's stats
-// for embedding into more complete structs: Batter, Pitcher, Fielder
-type bio struct {
-	ID     string
-	Year   float64
-	Stint  string
-	Team   string
-	League string
-}
-
-// String prints biographical information about a player.
-func (p bio) String() string {
-	return fmt.Sprintf("%s,%.0f,%s,%s,%s", p.ID, p.Year, p.Stint, p.Team, p.League)
-}
-
 // A Player is a struct that contains all batting and pitching stats for a player.
 type Player struct {
 	Bat BatStats
@@ -31,13 +16,13 @@ func (p Player) IsPosPitcher() bool {
 	return p.b && p.p
 }
 
-// String prints a player's information
+// String returns a string representing a Player's complete statline.
 func (p Player) String() string {
-	var name string
-	if f, l := p.FirstName(), p.LastName(); f != "" && l != "" {
-		name = fmt.Sprintf("%s %s,", f, l)
+	var s string
+	if name := p.Name(); name != "" {
+		s = name + ","
 	}
-	s := name + p.bio.String()
+	s += p.bio.String()
 	if p.b {
 		s += "\nBatting:  " + p.Bat.String()
 	}
@@ -46,6 +31,39 @@ func (p Player) String() string {
 	}
 	return s
 }
+
+// struct that list the unique identifying information for a given player's stats
+// for embedding into more complete structs: Batter, Pitcher, Fielder
+type bio struct {
+	id     string
+	year   float64
+	stint  string
+	team   string
+	league string
+}
+
+// String returns the basic information about a Player's bio
+func (p bio) String() string {
+	return fmt.Sprintf("%s,%.0f,%s,%s,%s", p.id, p.year, p.stint, p.team, p.league)
+}
+
+// ID returns a player's lahmanDB ID
+func (p bio) ID() string { return p.id }
+
+// Year returns the year of a Player's statline.
+func (p bio) Year() int { return int(p.year) }
+
+// Stint returns:
+// 	for regular season play, the number of their season's appearance with a given team
+//	(In other words, if a players is traded their stats for the second team will be stint "2")
+//	for postseason play, the *round* of play
+func (p bio) Stint() string { return p.stint }
+
+// Team returns the team code a Player played for.
+func (p bio) Team() string { return p.team }
+
+// League returns the league a Player played for.
+func (p bio) League() string { return p.league }
 
 // Master lists biographical data fromt he Master database
 type master [24]string
@@ -61,5 +79,5 @@ func (mas master) csvRead(line []string) (csvReader, error) {
 	return m, nil
 }
 
-func (p master) FirstName() string { return m[13] }
-func (p master) LastName() string  { return m[14] }
+// Name returns a player's name.
+func (p master) Name() string { return fmt.Sprintf("%s %s", p[13], p[14]) }
