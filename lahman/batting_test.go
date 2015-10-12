@@ -43,7 +43,7 @@ func Test_NewBatter(t *testing.T) {
 
 // Test that bad input returns an error message.
 func Test_Parsing(t *testing.T) {
-	linetwoerr := "addybo01,1871,bob,RC1,NA,25,118,30,32,6,0,0,13,8,1,4,0,,,,,"
+	linetwoerr := "addybo01,notayear,bob,RC1,NA,25,118,30,32,6,0,0,13,8,1,4,0,,,,,"
 
 	line, _ := csv.NewReader(strings.NewReader(linetwoerr)).Read()
 	_, err := batter{}.csvRead(line)

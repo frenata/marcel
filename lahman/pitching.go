@@ -60,7 +60,7 @@ func (pit pitcher) csvRead(line []string) (csvReader, error) {
 
 	p.ID = line[0]
 	p.Year = ep.parseStat(line[1])
-	p.Stint = ep.parseStat(line[2])
+	p.Stint = line[2] // ep.parseStat(line[2])
 	p.Team = line[3]
 	p.League = line[4]
 
@@ -71,6 +71,7 @@ func (pit pitcher) csvRead(line []string) (csvReader, error) {
 	//b.BatStats[0] = b.BatStats[2] + b.BatStats[11] + b.BatStats[14] + b.BatStats[15] + b.BatStats[16]
 
 	if ep.err != nil {
+		//fmt.Println(ep.err)
 		return nil, ep.err
 	}
 

@@ -1,9 +1,12 @@
 package lahman
 
-import "os"
+import (
+	"log"
+	"os"
+)
 
-var bats string = os.Getenv("GOPATH") + "/src/github.com/frenata/marcel/lahman/data/Batting.csv"
-var pits string = os.Getenv("GOPATH") + "/src/github.com/frenata/marcel/lahman/data/Pitching.csv"
+var bats string = os.Getenv("GOPATH") + "/src/github.com/frenata/marcel/lahman/data/BattingPost.csv"
+var pits string = os.Getenv("GOPATH") + "/src/github.com/frenata/marcel/lahman/data/PitchingPost.csv"
 
 var batDB []*batter
 var pitDB []*pitcher
@@ -35,7 +38,11 @@ func GetYear(year float64) []*Player {
 
 // initializes the pitching and batting databases into package variables
 func init() {
-	lines, _ := ReadAll(bats, batter{})
+	lines, err := ReadAll(bats, batter{})
+	if err != nil {
+		log.Fatal(err)
+	}
+	//fmt.Println("Batters loaded", len(lines))
 	res := []*batter{}
 	for _, l := range lines {
 		b := l.(*batter)
@@ -43,7 +50,11 @@ func init() {
 	}
 	batDB = res
 
-	plines, _ := ReadAll(pits, pitcher{})
+	plines, err := ReadAll(pits, pitcher{})
+	//fmt.Println("Pitchers loaded", len(plines))
+	if err != nil {
+		log.Fatal(err)
+	}
 	pres := []*pitcher{}
 	for _, l := range plines {
 		b := l.(*pitcher)

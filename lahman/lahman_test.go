@@ -1,5 +1,7 @@
 package lahman_test
 
+// TODO: add tests for init() databases
+
 import (
 	"testing"
 

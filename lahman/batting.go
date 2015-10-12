@@ -1,6 +1,9 @@
 package lahman
 
-import "fmt"
+import (
+	"fmt"
+	"strconv"
+)
 
 // A Batter holds all the stats for a player's batting line
 type batter struct {
@@ -36,11 +39,22 @@ func (bat batter) csvRead(line []string) (csvReader, error) {
 	b := &batter{bio: bio{}}
 	ep := &errParser{}
 
-	b.ID = line[0]
-	b.Year = ep.parseStat(line[1])
-	b.Stint = ep.parseStat(line[2])
-	b.Team = line[3]
-	b.League = line[4]
+	_, err := strconv.ParseFloat(line[0], 64)
+
+	switch err {
+	case nil: // BattingPost format
+		b.ID = line[2]
+		b.Year = ep.parseStat(line[0])
+		b.Stint = line[1]
+		b.Team = line[3]
+		b.League = line[4]
+	default:
+		b.ID = line[0]
+		b.Year = ep.parseStat(line[1])
+		b.Stint = line[2] //ep.parseStat(line[2])
+		b.Team = line[3]
+		b.League = line[4]
+	}
 
 	for i := 1; i < len(b.BatStats); i++ {
 		b.BatStats[i] = ep.parseStat(line[i+4])
