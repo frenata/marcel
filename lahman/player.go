@@ -61,5 +61,5 @@ func (mas master) csvRead(line []string) (csvReader, error) {
 	return m, nil
 }
 
-func (m master) FirstName() string { return m[13] }
-func (m master) LastName() string  { return m[14] }
+func (p master) FirstName() string { return m[13] }
+func (p master) LastName() string  { return m[14] }
