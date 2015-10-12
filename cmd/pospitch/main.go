@@ -24,7 +24,7 @@ func main() {
 	pp := []*lahman.Player{}
 
 	for i := min; i <= max; i++ {
-		players := lahman.GetYear(float64(i))
+		players := lahman.GetYear(i)
 		for _, p := range players {
 			//if p.Pitching != nil && p.Pitching.BFP < p.Batting.AB {
 			if p.IsPosPitcher() {

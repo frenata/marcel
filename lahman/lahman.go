@@ -23,10 +23,10 @@ var (
 )
 
 // GetYear returns a list of all Players, with batting and pitching lines, for that year.
-func GetYear(year float64) []*Player     { return getWhich(year, "regular") }
-func GetPostYear(year float64) []*Player { return getWhich(year, "postseason") }
+func GetYear(year int) []*Player     { return getWhich(year, "regular") }
+func GetPostYear(year int) []*Player { return getWhich(year, "postseason") }
 
-func getWhich(year float64, which string) []*Player {
+func getWhich(year int, which string) []*Player {
 	switch which {
 	case "postseason":
 		return getData(year, batPostDB, pitPostDB)
@@ -37,7 +37,7 @@ func getWhich(year float64, which string) []*Player {
 	}
 }
 
-func getData(year float64, bat batDB, pit pitDB) []*Player {
+func getData(year int, bat batDB, pit pitDB) []*Player {
 	batters := battingYear(year, bat)
 	pitchers := pitchingYear(year, pit)
 	players := make([]*Player, len(batters))
@@ -63,10 +63,10 @@ func getData(year float64, bat batDB, pit pitDB) []*Player {
 }
 
 // read the batting database and returns a list of batters for a given year
-func battingYear(year float64, bat batDB) []*batter {
+func battingYear(year int, bat batDB) []*batter {
 	res := []*batter{}
 	for _, b := range bat {
-		if b.Year == year {
+		if b.Year == float64(year) {
 			res = append(res, b)
 		}
 	}
@@ -74,10 +74,10 @@ func battingYear(year float64, bat batDB) []*batter {
 }
 
 // read the pitching database and return a list of pitchers for a given year
-func pitchingYear(year float64, pit pitDB) []*pitcher {
+func pitchingYear(year int, pit pitDB) []*pitcher {
 	res := []*pitcher{}
 	for _, p := range pit {
-		if p.Year == year {
+		if p.Year == float64(year) {
 			res = append(res, p)
 		}
 	}
