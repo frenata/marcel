@@ -40,5 +40,20 @@ func Test_LeagueAvg(t *testing.T) {
 }
 
 func Test_weightPlayer(t *testing.T) {
-	//weightPlayer(2004, "beltraca01")
+	p, pa, _ := weightPlayer("beltrca01", 2004)
+	fmt.Println(p.PA(), p)
+	fmt.Println(pa)
+
+	if p.HR() != 318 {
+		t.Fatal("did not weight HR's correctly by year")
+	}
+	if p.PA() != 7938 {
+		t.Fatal("did not weight PA's correctly by year")
+	}
+}
+
+func Test_regressPlayer(t *testing.T) {
+	//regress := regressPlayer("beltrca01", 2004)
+	regress := regressPlayer("beltrad01", 2004)
+	fmt.Println(regress.Precise())
 }

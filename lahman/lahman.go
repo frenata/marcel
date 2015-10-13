@@ -22,6 +22,21 @@ var (
 	masterDB     map[string]master
 )
 
+// GetPlayer returns the past 3 years of data for that Player
+// TODO: test
+func GetPlayer(id string, year int, n int) []*Player {
+	results := []*Player{}
+
+	for i := n; i > 0; i-- {
+		for _, p := range getWhich(year-i, "") {
+			if p.ID() == id {
+				results = append(results, p)
+			}
+		}
+	}
+	return results
+}
+
 // GetYear returns a list of all Players, with batting and pitching lines, for the regular season that year.
 func GetYear(year int) []*Player { return getWhich(year, "regular") }
 

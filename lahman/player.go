@@ -1,6 +1,9 @@
 package lahman
 
-import "fmt"
+import (
+	"fmt"
+	"strconv"
+)
 
 // A Player is a struct that contains all batting and pitching stats for a player.
 type Player struct {
@@ -83,3 +86,10 @@ func (mas master) csvRead(line []string) (csvReader, error) {
 
 // Name returns a player's name.
 func (p master) Name() string { return fmt.Sprintf("%s %s", p[13], p[14]) }
+
+// Birth returns a player's birth year.
+func (p master) Birth() int {
+	y := p[1]
+	n, _ := strconv.Atoi(y)
+	return n
+}
