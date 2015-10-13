@@ -3,7 +3,6 @@ package lahman
 import (
 	"bytes"
 	"encoding/csv"
-	"fmt"
 	"io/ioutil"
 	"strconv"
 )
@@ -64,6 +63,6 @@ loop:
 		}
 	}
 
-	fmt.Println(file, len(results))
+	//	fmt.Println(file, len(results))
 	return results, err
 }

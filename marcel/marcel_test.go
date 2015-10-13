@@ -54,6 +54,6 @@ func Test_weightPlayer(t *testing.T) {
 
 func Test_regressPlayer(t *testing.T) {
 	//regress := regressPlayer("beltrca01", 2004)
-	regress := regressPlayer("beltrad01", 2004)
+	regress := RegressPlayer("beltrad01", 2004)
 	fmt.Println(regress.Precise())
 }

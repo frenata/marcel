@@ -10,7 +10,7 @@ type Player struct {
 	lahman.Player
 }
 
-func regressPlayer(id string, year int) (regress lahman.BatStats) {
+func RegressPlayer(id string, year int) (regress lahman.BatStats) {
 	accum, pa, birth := weightPlayer(id, year)
 	league1, _ := leagueAvg(year - 1)
 	league2, _ := leagueAvg(year - 2)

@@ -38,10 +38,10 @@ func GetPlayer(id string, year int, n int) []*Player {
 }
 
 // GetYear returns a list of all Players, with batting and pitching lines, for the regular season that year.
-func GetYear(year int) []*Player { return getWhich(year, "regular") }
+func GetYear(year int) []*Player { initYear(year); return getWhich(year, "regular") }
 
 // GetPostYear returns a list of all Players, with batting and pitching lines, for postseason that year.
-func GetPostYear(year int) []*Player { return getWhich(year, "postseason") }
+func GetPostYear(year int) []*Player { initYear(year); return getWhich(year, "postseason") }
 
 // getWhich picks what databases to read based on the helper function that calls it.
 func getWhich(year int, which string) []*Player {
@@ -106,11 +106,11 @@ func pitchingYear(year int, pit pitDB) []*pitcher {
 
 // initializes the pitching and batting databases into package variables
 func init() {
-	batRegularDB = initBat(batting, 2000, 2015)
-	pitRegularDB = initPit(pitching, 2000, 2015)
+	//batRegularDB = initBat(batting, 2001, 2003)
+	//pitRegularDB = initPit(pitching, 2001, 2003)
 
-	batPostDB = initBat(battingPost, 2000, 2015)
-	pitPostDB = initPit(pitchingPost, 2000, 2015)
+	//batPostDB = initBat(battingPost, 2000, 2015)
+	//pitPostDB = initPit(pitchingPost, 2000, 2015)
 
 	// init the master database
 	masterDB = make(map[string]master)
@@ -122,6 +122,11 @@ func init() {
 		m := l.(master)
 		masterDB[m[0]] = m
 	}
+}
+
+func initYear(year int) {
+	batRegularDB = append(batRegularDB, initBat(batting, year, year)...)
+	pitRegularDB = append(pitRegularDB, initPit(pitching, year, year)...)
 }
 
 // initializes a batting database
