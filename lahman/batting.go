@@ -24,6 +24,19 @@ func (b BatStats) String() string {
 	return s[:len(s)-1]
 }
 
+func (b BatStats) Precise() string {
+	var s string
+	for i := 0; i < len(b); i++ {
+		switch {
+		case b[i] == -1:
+			s += ","
+		default:
+			s += fmt.Sprintf("%.5f,", b[i])
+		}
+	}
+	return s[:len(s)-1]
+}
+
 // PA, etc, return the Player's named batting stat.
 func (b BatStats) PA() float64   { return b[0] }
 func (b BatStats) G() float64    { return b[1] }

@@ -6,6 +6,12 @@ type Player struct {
 	lahman.Player
 }
 
+/*
+func weightPlayer(year int, id string) {
+	accum := lahman.BatStats{}
+}
+*/
+
 func leagueAvg(year int) (bat lahman.BatStats, pit lahman.PitchStats) {
 	var bCount, pCount, ipCount, bfCount float64
 	players := lahman.GetYear(year)
@@ -17,7 +23,7 @@ func leagueAvg(year int) (bat lahman.BatStats, pit lahman.PitchStats) {
 			}
 			bCount++
 		}
-		if p.IsPitcher() {
+		if p.IsPitcher() && !p.IsPosPitcher() {
 			for i := 0; i < len(pit); i++ {
 				switch i {
 				case 13:
@@ -34,9 +40,11 @@ func leagueAvg(year int) (bat lahman.BatStats, pit lahman.PitchStats) {
 		}
 	}
 
-	for i := 0; i < len(bat); i++ {
-		bat[i] = bat[i] / bCount
+	for i := 1; i < len(bat); i++ {
+		bat[i] = bat[i] / bat.PA()
 	}
+	bat[0] = bat[0] / bCount
+
 	for i := 0; i < len(pit); i++ {
 		switch i {
 		case 13:

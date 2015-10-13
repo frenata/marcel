@@ -22,8 +22,23 @@ func Test_GetYear(t *testing.T) {
 }
 
 func Test_LeagueAvg(t *testing.T) {
-	bat, pit := leagueAvg(2003)
-	fmt.Println(bat)
-	fmt.Println(pit)
+	bat, _ := leagueAvg(2003)
+	if fmt.Sprintf("%.4f", bat.HR()) != "0.0285" {
+		t.Log(bat.HR())
+		t.Fatal("doesn't match TT")
+	}
+	bat, _ = leagueAvg(2002)
+	if fmt.Sprintf("%.4f", bat.HR()) != "0.0279" {
+		t.Log(bat.HR())
+		t.Fatal("doesn't match TT")
+	}
+	bat, _ = leagueAvg(2001)
+	if fmt.Sprintf("%.4f", bat.HR()) != "0.0300" {
+		t.Log(bat.HR())
+		t.Fatal("doesn't match TT")
+	}
+}
 
+func Test_weightPlayer(t *testing.T) {
+	//weightPlayer(2004, "beltraca01")
 }
