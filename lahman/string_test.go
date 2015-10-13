@@ -7,6 +7,7 @@ import (
 )
 
 func Test_GetYear_PrintBatter(t *testing.T) {
+	lahman.LoadDB(2014, 2014)
 	players := lahman.GetYear(2014)
 
 	p := players[42] // Oswaldo Arcia
@@ -54,6 +55,7 @@ func Test_GetYear_PrintBatter(t *testing.T) {
 }
 
 func Test_GetYear_PrintPitcher(t *testing.T) {
+	lahman.LoadDB(2014, 2014)
 	players := lahman.GetYear(2014)
 
 	p := players[0] // Fernando Abad

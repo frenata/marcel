@@ -18,6 +18,7 @@ func main() {
 		min, _ = strconv.Atoi(os.Args[1])
 		max = min
 	}
+	lahman.LoadDB(min, max)
 
 	count := 0
 	var apps int16 = 0
