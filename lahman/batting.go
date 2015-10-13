@@ -59,6 +59,7 @@ func (b BatStats) GIDP() float64 { return b[17] }
 
 // A Batter holds all the stats for a player's batting line
 type batter struct {
+	startY, endY int
 	bio
 	BatStats
 }
@@ -69,6 +70,9 @@ func (b batter) String() string {
 		b.bio, b.BatStats)
 
 }
+
+func (b batter) start() int { return b.startY }
+func (b batter) end() int   { return b.endY }
 
 // csvRead implements csvReader
 // It reads from a csv line, and returns an instance of a Batter object.

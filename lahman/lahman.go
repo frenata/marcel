@@ -106,11 +106,11 @@ func pitchingYear(year int, pit pitDB) []*pitcher {
 
 // initializes the pitching and batting databases into package variables
 func init() {
-	batRegularDB = initBat(batting)
-	pitRegularDB = initPit(pitching)
+	batRegularDB = initBat(batting, 2000, 2015)
+	pitRegularDB = initPit(pitching, 2000, 2015)
 
-	batPostDB = initBat(battingPost)
-	pitPostDB = initPit(pitchingPost)
+	batPostDB = initBat(battingPost, 2000, 2015)
+	pitPostDB = initPit(pitchingPost, 2000, 2015)
 
 	// init the master database
 	masterDB = make(map[string]master)
@@ -125,8 +125,8 @@ func init() {
 }
 
 // initializes a batting database
-func initBat(file string) (results []*batter) {
-	lines, err := readAll(file, batter{})
+func initBat(file string, start, end int) (results []*batter) {
+	lines, err := readAll(file, batter{startY: start, endY: end})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -138,8 +138,8 @@ func initBat(file string) (results []*batter) {
 }
 
 // initializes a pitching database
-func initPit(file string) (results []*pitcher) {
-	lines, err := readAll(file, pitcher{})
+func initPit(file string, start, end int) (results []*pitcher) {
+	lines, err := readAll(file, pitcher{startY: start, endY: end})
 	if err != nil {
 		log.Fatal(err)
 	}
