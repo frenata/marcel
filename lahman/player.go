@@ -15,6 +15,8 @@ type Player struct {
 func (p Player) IsPosPitcher() bool {
 	return p.b && p.p
 }
+func (p Player) IsPitcher() bool { return p.p }
+func (p Player) IsBatter() bool  { return p.b }
 
 // String returns a string representing a Player's complete statline.
 func (p Player) String() string {

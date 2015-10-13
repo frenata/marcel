@@ -1,4 +1,4 @@
-package marcel_test
+package marcel
 
 import (
 	"fmt"
@@ -13,10 +13,17 @@ func Test_GetYear(t *testing.T) {
 		players := lahman.GetPostYear(i)
 		for _, p := range players {
 			if p.Pit.SHO() > 0 && p.Pit.H() == 0 {
-				fmt.Println(p)
+				//fmt.Println(p)
 				count++
 			}
 		}
 	}
-	fmt.Println("World series shutouts in history: ", count)
+	//fmt.Println("World series shutouts in history: ", count)
+}
+
+func Test_LeagueAvg(t *testing.T) {
+	bat, pit := leagueAvg(2003)
+	fmt.Println(bat)
+	fmt.Println(pit)
+
 }
