@@ -43,10 +43,13 @@ func readAll(file string, c csvReader) ([]csvReader, error) {
 		return nil, err
 	}
 
-	results := make([]csvReader, len(lines))
+	results := make([]csvReader, 0) // len(lines))
 loop:
 	for _, l := range lines {
-		year, _ := strconv.Atoi(l[1])
+		year, err := strconv.Atoi(l[1])
+		if err != nil { //BAttingPost.csv
+			year, err = strconv.Atoi(l[0])
+		}
 		switch {
 		case year < c.start():
 			break
@@ -61,6 +64,6 @@ loop:
 		}
 	}
 
-	fmt.Println(len(results))
+	fmt.Println(file, len(results))
 	return results, err
 }
