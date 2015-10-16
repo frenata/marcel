@@ -8,6 +8,11 @@ import (
 )
 
 func Test_GetYear(t *testing.T) {
+	years := []int{}
+	for i := 1871; i < 2015; i++ {
+		years = append(years, i)
+	}
+	lahman.Load(years...)
 	count := 0
 	for i := 1871; i < 2015; i++ {
 		players := lahman.GetPostYear(i)
