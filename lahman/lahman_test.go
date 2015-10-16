@@ -18,8 +18,10 @@ var pitchtail string = "zimmejo02,2014,1,WAS,NL,14,5,32,32,3,2,0,599,185,59,13,2
 func Test_GetYear(t *testing.T) {
 	players := lahman.GetYear(2003)
 
+	none := true
 	for _, p := range players {
 		if p.IsPosPitcher() { // in 2003, only wiki
+			none = false
 			if wiki2003 != p.String() {
 				t.Log(p)
 				t.Log(wiki2003)
@@ -27,13 +29,18 @@ func Test_GetYear(t *testing.T) {
 			}
 		}
 	}
+	if none {
+		t.Fatal("Wiki isn't there! :(")
+	}
 }
 
 func Test_GetPostYear(t *testing.T) {
 	players := lahman.GetPostYear(2010)
 
+	none := true
 	for _, p := range players {
 		if p.Pit.SHO() > 0 && p.Pit.H() == 0 { // Roy Halladay 2010
+			none = false
 			if p.Year() != 2010 {
 				t.Log(p.Year())
 				t.Fatal("Year should be 2010")
@@ -43,5 +50,8 @@ func Test_GetPostYear(t *testing.T) {
 				t.Fatal("Stint should be NLDS1")
 			}
 		}
+	}
+	if none {
+		t.Fatal("Halladay isn't there")
 	}
 }

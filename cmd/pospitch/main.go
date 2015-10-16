@@ -10,7 +10,6 @@ import (
 
 func main() {
 	min, max := 2003, 2003
-
 	if len(os.Args) > 2 {
 		min, _ = strconv.Atoi(os.Args[1])
 		max, _ = strconv.Atoi(os.Args[2])
@@ -18,10 +17,21 @@ func main() {
 		min, _ = strconv.Atoi(os.Args[1])
 		max = min
 	}
+	var years []int
+	for i := min; i <= max; i++ {
+		years = append(years, i)
+	}
 
-	count := 0
-	var apps int16 = 0
-	pp := []*lahman.Player{}
+	players, count, apps := check(min, max)
+	for _, p := range players {
+		fmt.Println(p)
+	}
+	fmt.Printf("Position players pitching: %d\n", count)
+	fmt.Printf("Position players pitched %d times total.\n", apps)
+}
+
+func check(min, max int) (pp []*lahman.Player, count int, apps int) {
+	//pp := []*lahman.Player{}
 
 	for i := min; i <= max; i++ {
 		players := lahman.GetYear(i)
@@ -30,14 +40,9 @@ func main() {
 			if p.IsPosPitcher() {
 				pp = append(pp, p)
 				count++
-				apps += int16(p.Pit.G())
+				apps += int(p.Pit.G())
 			}
 		}
 	}
-
-	for _, p := range pp {
-		fmt.Println(p)
-	}
-	fmt.Printf("Position players pitching: %d\n", count)
-	fmt.Printf("Position players pitched %d times total.\n", apps)
+	return pp, count, apps
 }

@@ -1,16 +1,13 @@
 package marcel
 
-import (
-	"fmt"
-
-	"github.com/frenata/marcel/lahman"
-)
+import "github.com/frenata/marcel/lahman"
 
 type Player struct {
 	lahman.Player
 }
 
-func regressPlayer(id string, year int) (regress lahman.BatStats) {
+func RegressPlayer(id string, year int) (regress lahman.BatStats) {
+	//lahman.Load(year-3, year-2, year-1)
 	accum, pa, birth := weightPlayer(id, year)
 	league1, _ := leagueAvg(year - 1)
 	league2, _ := leagueAvg(year - 2)
@@ -38,7 +35,7 @@ func regressPlayer(id string, year int) (regress lahman.BatStats) {
 		ageAdj = 0
 	}
 
-	fmt.Println(ageAdj)
+	//fmt.Println(ageAdj)
 	for i := 3; i < len(regress); i++ {
 		switch {
 		case i == 10:
@@ -59,6 +56,8 @@ func regressPlayer(id string, year int) (regress lahman.BatStats) {
 
 func weightPlayer(id string, year int) (accum lahman.BatStats, pa [3]float64, birth int) {
 	//accum := lahman.BatStats{}
+	//fmt.Println(year)
+	//lahman.Load(year-3, year-2, year-1)
 	res := lahman.GetPlayer(id, year, 3)
 	for _, p := range res {
 		for i, v := range p.Bat {
@@ -79,6 +78,7 @@ func weightPlayer(id string, year int) (accum lahman.BatStats, pa [3]float64, bi
 }
 
 func leagueAvg(year int) (bat lahman.BatStats, pit lahman.PitchStats) {
+	//lahman.Load(year)
 	var bCount, pCount, ipCount, bfCount float64
 	players := lahman.GetYear(year)
 

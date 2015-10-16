@@ -73,6 +73,8 @@ func (p bio) League() string { return p.league }
 // Master lists biographical data fromt he Master database
 type master [24]string
 
+func (m master) yearS() []int { return []int{} }
+
 //csvRead pulls data from a csv file into a Master object
 func (mas master) csvRead(line []string) (csvReader, error) {
 	m := master{}
