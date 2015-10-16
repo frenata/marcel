@@ -55,7 +55,7 @@ func (p PitchStats) GIDP() float64   { return p[24] }
 
 // A Pitcher holds all the stats for a player's pitching line
 type pitcher struct {
-	startY, endY int
+	years []int
 	bio
 	PitchStats
 }
@@ -66,8 +66,7 @@ func (p pitcher) String() string {
 		p.bio, p.PitchStats)
 }
 
-func (p pitcher) start() int { return p.startY }
-func (p pitcher) end() int   { return p.endY }
+func (p pitcher) yearS() []int { return p.years }
 
 // creates a pitcher by reading from a line of a csv file
 func (pit pitcher) csvRead(line []string) (csvReader, error) {

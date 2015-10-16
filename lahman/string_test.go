@@ -7,7 +7,7 @@ import (
 )
 
 func Test_GetYear_PrintBatter(t *testing.T) {
-	lahman.LoadDB(2014, 2014)
+	lahman.Load(2014)
 	players := lahman.GetYear(2014)
 
 	//for _, p := range players {
@@ -61,7 +61,7 @@ func Test_GetYear_PrintBatter(t *testing.T) {
 }
 
 func Test_GetYear_PrintPitcher(t *testing.T) {
-	lahman.LoadDB(2014, 2014)
+	lahman.Load(2014)
 	players := lahman.GetYear(2014)
 
 	t.Log("Players in 2014", len(players))

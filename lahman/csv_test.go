@@ -47,7 +47,7 @@ func Test_BadFile(t *testing.T) {
 
 // test read full file, check last line
 func Test_ReadFull(t *testing.T) {
-	batters, err := readAll("data/Batting.csv", batter{startY: 0, endY: -1})
+	batters, err := readAll("data/Batting.csv", batter{})
 	if err != nil {
 		t.Fatal("error reading full file")
 	}
@@ -79,7 +79,7 @@ func Test_ReadFull(t *testing.T) {
 
 // test read full file, check last line
 func Test_ReadFullPitch(t *testing.T) {
-	pitchers, err := readAll("data/Pitching.csv", pitcher{startY: 0, endY: -1})
+	pitchers, err := readAll("data/Pitching.csv", pitcher{})
 	if err != nil {
 		t.Log(err)
 		t.Fatal("error reading full file")

@@ -10,7 +10,6 @@ import (
 
 func main() {
 	min, max := 2003, 2003
-
 	if len(os.Args) > 2 {
 		min, _ = strconv.Atoi(os.Args[1])
 		max, _ = strconv.Atoi(os.Args[2])
@@ -18,8 +17,16 @@ func main() {
 		min, _ = strconv.Atoi(os.Args[1])
 		max = min
 	}
-	lahman.LoadDB(min, max)
+	var years []int
+	for i := min; i <= max; i++ {
+		years = append(years, i)
+	}
 
+	lahman.Load(years...)
+	check(min, max)
+}
+
+func check(min, max int) {
 	count := 0
 	var apps int16 = 0
 	pp := []*lahman.Player{}

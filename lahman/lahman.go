@@ -124,14 +124,14 @@ func init() {
 	}
 }
 
-func LoadDB(start, end int) {
-	batRegularDB = initBat(batting, start, end)
-	pitRegularDB = initPit(pitching, start, end)
+func Load(years ...int) {
+	batRegularDB = initBat(batting, years)
+	pitRegularDB = initPit(pitching, years)
 }
 
 // initializes a batting database
-func initBat(file string, start, end int) (results []*batter) {
-	lines, err := readAll(file, batter{startY: start, endY: end})
+func initBat(file string, years []int) (results []*batter) {
+	lines, err := readAll(file, batter{years: years})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -143,8 +143,8 @@ func initBat(file string, start, end int) (results []*batter) {
 }
 
 // initializes a pitching database
-func initPit(file string, start, end int) (results []*pitcher) {
-	lines, err := readAll(file, pitcher{startY: start, endY: end})
+func initPit(file string, years []int) (results []*pitcher) {
+	lines, err := readAll(file, pitcher{years: years})
 	if err != nil {
 		log.Fatal(err)
 	}

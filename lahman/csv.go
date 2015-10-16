@@ -12,8 +12,7 @@ import (
 // csvReader is an interface that can read a line of csv and create an object
 type csvReader interface {
 	csvRead([]string) (csvReader, error)
-	start() int
-	end() int
+	yearS() []int
 }
 
 // newReader starts up a new csv reader from a file
@@ -33,18 +32,18 @@ func readAll(file string, c csvReader) ([]csvReader, error) {
 	var r *csv.Reader
 	var err error
 
-	if c.start() == 0 { // no limits on db load
+	if len(c.yearS()) == 0 { // no limits on db load
 		r, err = newReader(file)
 		if err != nil {
 			return nil, err
 		}
 		r.Read() //dispose of the first line if not grepping file
 	} else { // limited db load
-		years := []int{}
+		/*years := []int{}
 		for i := c.start(); i < c.end()+1; i++ {
 			years = append(years, i)
-		}
-		r, err = grepYear(file, years)
+		}*/
+		r, err = grepYear(file, c.yearS())
 		if err != nil {
 			return nil, err
 		}
