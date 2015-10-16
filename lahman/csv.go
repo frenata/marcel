@@ -86,7 +86,7 @@ func grepYear(file string, years []int) (*csv.Reader, error) {
 
 	buf, err := ioutil.ReadAll(stdout)
 
-	if err := cmd.Wait(); err != nil {
+	if err := cmd.Wait(); err != nil && fmt.Sprint(err) != "exit status 1" {
 		return nil, err
 	}
 

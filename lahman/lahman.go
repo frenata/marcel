@@ -5,8 +5,19 @@ import (
 	"os"
 )
 
+type db struct {
+	years        []int
+	batPostDB    batDB
+	pitPostDB    pitDB
+	batRegularDB batDB
+	pitRegularDB pitDB
+	masterDB     map[string]master
+}
+
 type batDB []*batter
 type pitDB []*pitcher
+
+var cur db
 
 var (
 	masterCsv    string = os.Getenv("GOPATH") + "/src/github.com/frenata/marcel/lahman/data/Master.csv"
@@ -14,12 +25,6 @@ var (
 	pitching     string = os.Getenv("GOPATH") + "/src/github.com/frenata/marcel/lahman/data/Pitching.csv"
 	battingPost  string = os.Getenv("GOPATH") + "/src/github.com/frenata/marcel/lahman/data/BattingPost.csv"
 	pitchingPost string = os.Getenv("GOPATH") + "/src/github.com/frenata/marcel/lahman/data/PitchingPost.csv"
-
-	batPostDB    batDB
-	pitPostDB    pitDB
-	batRegularDB batDB
-	pitRegularDB pitDB
-	masterDB     map[string]master
 )
 
 // GetPlayer returns the past 3 years of data for that Player
@@ -28,7 +33,7 @@ func GetPlayer(id string, year int, n int) []*Player {
 	results := []*Player{}
 
 	for i := n; i > 0; i-- {
-		for _, p := range getWhich(year-i, "") {
+		for _, p := range cur.getData(year-i, "") {
 			if p.ID() == id {
 				results = append(results, p)
 			}
@@ -38,26 +43,26 @@ func GetPlayer(id string, year int, n int) []*Player {
 }
 
 // GetYear returns a list of all Players, with batting and pitching lines, for the regular season that year.
-func GetYear(year int) []*Player { return getWhich(year, "regular") }
+func GetYear(year int) []*Player { return cur.getData(year, "regular") }
 
 // GetPostYear returns a list of all Players, with batting and pitching lines, for postseason that year.
-func GetPostYear(year int) []*Player { return getWhich(year, "postseason") }
-
-// getWhich picks what databases to read based on the helper function that calls it.
-func getWhich(year int, which string) []*Player {
-	switch which {
-	case "postseason":
-		return getData(year, batPostDB, pitPostDB)
-	case "regular":
-		fallthrough
-	default:
-		return getData(year, batRegularDB, pitRegularDB)
-	}
-}
+func GetPostYear(year int) []*Player { return cur.getData(year, "postseason") }
 
 // getData reads battings and pitching data from a given database, merges any duplicate players together,
 // and returns the list.
-func getData(year int, bat batDB, pit pitDB) []*Player {
+func (d *db) getData(year int, which string) []*Player { /// bat batDB, pit pitDB) []*Player {
+	var bat batDB
+	var pit pitDB
+
+	d.load(year)
+
+	switch which {
+	case "postseason":
+		bat, pit = d.batPostDB, d.pitPostDB
+	default: // "regular"
+		bat, pit = d.batRegularDB, d.pitRegularDB
+	}
+
 	batters := battingYear(year, bat)
 	pitchers := pitchingYear(year, pit)
 	players := make([]*Player, len(batters))
@@ -66,7 +71,7 @@ func getData(year int, bat batDB, pit pitDB) []*Player {
 		players[i] = &Player{}
 		players[i].b = true
 		players[i].bio = b.bio
-		players[i].master = masterDB[b.bio.id]
+		players[i].master = d.masterDB[b.bio.id]
 		players[i].Bat = b.BatStats
 		for _, p := range pitchers {
 			if p.bio == b.bio {
@@ -106,27 +111,51 @@ func pitchingYear(year int, pit pitDB) []*pitcher {
 
 // initializes the pitching and batting databases into package variables
 func init() {
-	//batRegularDB = initBat(batting, 2001, 2003)
-	//pitRegularDB = initPit(pitching, 2001, 2003)
-
-	//batPostDB = initBat(battingPost, 2000, 2015)
-	//pitPostDB = initPit(pitchingPost, 2000, 2015)
-
 	// init the master database
-	masterDB = make(map[string]master)
+	cur.masterDB = make(map[string]master)
 	lines, err := readAll(masterCsv, master{})
 	if err != nil {
 		log.Fatal(err)
 	}
 	for _, l := range lines {
 		m := l.(master)
-		masterDB[m[0]] = m
+		cur.masterDB[m[0]] = m
 	}
 }
 
 func Load(years ...int) {
-	batRegularDB = initBat(batting, years)
-	pitRegularDB = initPit(pitching, years)
+	cur.years = []int{} //rest years to force load
+	cur.load(years...)
+}
+
+func (d *db) checkYears(in []int) (out []int) {
+	for _, y := range in {
+		already := false
+		for _, yC := range cur.years {
+			if y == yC {
+				already = true
+				break
+			}
+		}
+		if !already {
+			out = append(out, y)
+		}
+	}
+	return out
+}
+
+func (d *db) load(years ...int) {
+	newY := d.checkYears(years)
+
+	if len(newY) != 0 {
+		//fmt.Println("loading more years", newY)
+		d.batPostDB = append(d.batPostDB, initBat(battingPost, newY)...)
+		d.pitPostDB = append(d.pitPostDB, initPit(pitchingPost, newY)...)
+		d.batRegularDB = append(d.batRegularDB, initBat(batting, newY)...)
+		d.pitRegularDB = append(d.pitRegularDB, initPit(pitching, newY)...)
+	}
+
+	d.years = append(d.years, newY...)
 }
 
 // initializes a batting database

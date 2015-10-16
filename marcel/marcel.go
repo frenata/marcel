@@ -59,6 +59,7 @@ func RegressPlayer(id string, year int) (regress lahman.BatStats) {
 
 func weightPlayer(id string, year int) (accum lahman.BatStats, pa [3]float64, birth int) {
 	//accum := lahman.BatStats{}
+	fmt.Println(year)
 	lahman.Load(year-3, year-2, year-1)
 	res := lahman.GetPlayer(id, year, 3)
 	for _, p := range res {

@@ -22,7 +22,10 @@ func main() {
 		years = append(years, i)
 	}
 
-	lahman.Load(years...)
+	//lahman.Load(years...)
+	//lahman.Load(years...)
+	//lahman.Load(years...)
+	check(min, max)
 	check(min, max)
 }
 
