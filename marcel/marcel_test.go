@@ -18,7 +18,7 @@ func Test_GetYear(t *testing.T) {
 			}
 		}
 	}
-	//fmt.Println("World series shutouts in history: ", count)
+	fmt.Println("World series shutouts in history: ", count)
 }
 
 func Test_LeagueAvg(t *testing.T) {
