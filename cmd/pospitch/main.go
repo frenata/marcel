@@ -22,17 +22,16 @@ func main() {
 		years = append(years, i)
 	}
 
-	//lahman.Load(years...)
-	//lahman.Load(years...)
-	//lahman.Load(years...)
-	check(min, max)
-	check(min, max)
+	players, count, apps := check(min, max)
+	for _, p := range players {
+		fmt.Println(p)
+	}
+	fmt.Printf("Position players pitching: %d\n", count)
+	fmt.Printf("Position players pitched %d times total.\n", apps)
 }
 
-func check(min, max int) {
-	count := 0
-	var apps int16 = 0
-	pp := []*lahman.Player{}
+func check(min, max int) (pp []*lahman.Player, count int, apps int) {
+	//pp := []*lahman.Player{}
 
 	for i := min; i <= max; i++ {
 		players := lahman.GetYear(i)
@@ -41,14 +40,9 @@ func check(min, max int) {
 			if p.IsPosPitcher() {
 				pp = append(pp, p)
 				count++
-				apps += int16(p.Pit.G())
+				apps += int(p.Pit.G())
 			}
 		}
 	}
-
-	for _, p := range pp {
-		fmt.Println(p)
-	}
-	fmt.Printf("Position players pitching: %d\n", count)
-	fmt.Printf("Position players pitched %d times total.\n", apps)
+	return pp, count, apps
 }
