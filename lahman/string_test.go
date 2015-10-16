@@ -10,8 +10,14 @@ func Test_GetYear_PrintBatter(t *testing.T) {
 	lahman.LoadDB(2014, 2014)
 	players := lahman.GetYear(2014)
 
-	p := players[42] // Oswaldo Arcia
+	//for _, p := range players {
+	//	fmt.Println(p.Year(), p.Name(), p.Bat, p.Pit)
+	//}
 
+	t.Log("Players in 2014", len(players))
+
+	p := players[42] // Oswaldo Arcia
+	t.Log(p.Name(), "should be Oswaldo Arcia")
 	switch {
 	case p.Bat.PA() != 410:
 		fallthrough
@@ -58,7 +64,9 @@ func Test_GetYear_PrintPitcher(t *testing.T) {
 	lahman.LoadDB(2014, 2014)
 	players := lahman.GetYear(2014)
 
+	t.Log("Players in 2014", len(players))
 	p := players[0] // Fernando Abad
+	t.Log(p.Name(), "should be Abad")
 
 	switch {
 	case p.Pit.W() != 2:
