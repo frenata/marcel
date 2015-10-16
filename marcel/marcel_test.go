@@ -23,7 +23,10 @@ func Test_GetYear(t *testing.T) {
 			}
 		}
 	}
-	fmt.Println("World series shutouts in history: ", count)
+	if count != 1 {
+		t.Log("World series shutouts in history: ", count)
+		t.Fatal("there should be only one world series shutout in history!")
+	}
 }
 
 func Test_LeagueAvg(t *testing.T) {
@@ -45,9 +48,10 @@ func Test_LeagueAvg(t *testing.T) {
 }
 
 func Test_weightPlayer(t *testing.T) {
-	p, pa, _ := weightPlayer("beltrca01", 2004)
-	fmt.Println(p.PA(), p)
-	fmt.Println(pa)
+	p, pa, birth := weightPlayer("beltrca01", 2004)
+	t.Log("beltran's batting stats", p.PA(), p)
+	t.Log("plate appearances", pa)
+	t.Log("birth", birth)
 
 	if p.HR() != 318 {
 		t.Fatal("did not weight HR's correctly by year")
