@@ -1,0 +1,53 @@
+package main
+
+import "github.com/frenata/marcel/lahman"
+
+var bmap = map[string]interface{}{
+	"PA":   lahman.BatStats.PA,
+	"G":    lahman.BatStats.G,
+	"AB":   lahman.BatStats.AB,
+	"H":    lahman.BatStats.H,
+	"H2":   lahman.BatStats.H2,
+	"H3":   lahman.BatStats.H3,
+	"HR":   lahman.BatStats.HR,
+	"RBI":  lahman.BatStats.RBI,
+	"SB":   lahman.BatStats.SB,
+	"CS":   lahman.BatStats.CS,
+	"BB":   lahman.BatStats.BB,
+	"SO":   lahman.BatStats.SO,
+	"IBB":  lahman.BatStats.IBB,
+	"HBP":  lahman.BatStats.HBP,
+	"SH":   lahman.BatStats.SH,
+	"SF":   lahman.BatStats.SF,
+	"GIDP": lahman.BatStats.GIDP,
+}
+
+var pmap = map[string]interface{}{
+	"W":      lahman.PitchStats.W,
+	"L":      lahman.PitchStats.L,
+	"G":      lahman.PitchStats.G,
+	"GS":     lahman.PitchStats.GS,
+	"CG":     lahman.PitchStats.CG,
+	"SHO":    lahman.PitchStats.SHO,
+	"SV":     lahman.PitchStats.SV,
+	"IP3":    lahman.PitchStats.IPouts,
+	"IPouts": lahman.PitchStats.IPouts,
+	"H":      lahman.PitchStats.H,
+	"ER":     lahman.PitchStats.ER,
+	"HR":     lahman.PitchStats.HR,
+	"BB":     lahman.PitchStats.BB,
+	"SO":     lahman.PitchStats.SO,
+	"BAopp":  lahman.PitchStats.BAopp,
+	"BAA":    lahman.PitchStats.BAopp,
+	"ERA":    lahman.PitchStats.ERA,
+	"IBB":    lahman.PitchStats.IBB,
+	"WP":     lahman.PitchStats.WP,
+	"HBP":    lahman.PitchStats.HBP,
+	"BK":     lahman.PitchStats.BK,
+	"BFP":    lahman.PitchStats.BFP,
+	"GF":     lahman.PitchStats.GF,
+	"R":      lahman.PitchStats.R,
+	"SH":     lahman.PitchStats.SH,
+	"SF":     lahman.PitchStats.SF,
+	"GIDP":   lahman.PitchStats.GIDP,
+}
