@@ -23,17 +23,23 @@ func (p Player) IsBatter() bool  { return p.b }
 
 // String returns a string representing a Player's complete statline.
 func (p Player) String() string {
-	var s string
-	if name := p.Name(); name != "" {
-		s = name + ","
-	}
-	s += p.bio.String()
+	s := p.Bio()
 	if p.b {
 		s += "\nBatting:  " + p.Bat.String()
 	}
 	if p.p {
 		s += "\nPitching: " + p.Pit.String()
 	}
+	return s
+}
+
+// Bio returns a string with a player's biographical details.
+func (p Player) Bio() string {
+	var s string
+	if name := p.Name(); name != "" {
+		s = name + ","
+	}
+	s += p.bio.String()
 	return s
 }
 
