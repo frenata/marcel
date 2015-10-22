@@ -84,8 +84,13 @@ exit:
 			res, err := Query(input)
 			if err != nil {
 				fmt.Println(err)
+				break
 			}
-			fmt.Println(res)
+			//fmt.Println(res)
+			err = pipeLess(res)
+			if err != nil {
+				fmt.Println(err)
+			}
 		}
 	}
 	fmt.Println("Exiting.")
