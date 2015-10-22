@@ -88,8 +88,11 @@ exit:
 			}
 			//fmt.Println(res)
 			err = pipeLess(res)
-			if err != nil {
-				fmt.Println(err)
+			if strings.Contains(fmt.Sprint(err), "file not found") {
+				fmt.Println(res)
+				fmt.Println("Simple printing: ", err)
+			} else if err != nil {
+				fmt.Println("Unknown error: ", err)
 			}
 		}
 	}

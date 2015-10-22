@@ -18,6 +18,8 @@ func pipeLess(s string) error {
 	less := exec.Command("less")
 	less.Stdin = r
 	less.Stdout = os.Stdout
-	less.Start()
+	if err := less.Start(); err != nil {
+		return err
+	}
 	return less.Wait()
 }
