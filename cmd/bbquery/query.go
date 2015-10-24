@@ -15,12 +15,11 @@ func Query(s string) (r string, err error) {
 		return "", errors.New("No Query Found")
 	}
 
-	players, err := valYears(queries[0])
+	config.years, err = valYears(queries[0])
 	if err != nil {
 		return "", err
 	}
-	//players := playersQ
-	//fmt.Println(queries, len(queries))
+	players := getyears()
 
 	var bat, pit bool
 	res := playerS{}
@@ -133,16 +132,14 @@ func validate(s string) (bat bool, stat interface{}, op func(x, y float64) bool,
 	return bat, stat, op, n, nil
 }
 
-func valYears(s string) (playerS, error) {
-	res := playersQ // start point
-
+func valYears(s string) ([]int, error) {
 	switch {
 	case s == "*":
-		return res, nil
+		return intslice(FirstYear, LastYear), nil
 	case s == "m": // modern era
-		return getyears(intslice(FirstModernYear, LastYear)), nil
+		return intslice(FirstModernYear, LastYear), nil
 	case s == "pm": // pre-modern era
-		return getyears(intslice(FirstYear, FirstModernYear-1)), nil
+		return intslice(FirstYear, FirstModernYear-1), nil
 	case len(s) < 9:
 		break
 	default: // 18xx-20xx
@@ -157,7 +154,7 @@ func valYears(s string) (playerS, error) {
 		if start >= end {
 			return nil, errors.New("start year must be before end year")
 		}
-		return getyears(intslice(start, end)), nil
+		return intslice(start, end), nil
 	}
 	return nil, errors.New("unrecognized date")
 }

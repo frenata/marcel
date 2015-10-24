@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"os"
 	"strings"
@@ -17,14 +18,25 @@ const (
 
 type playerS []*lahman.Player
 
-var playersQ playerS
+var config struct {
+	post  bool
+	years []int
+	playerS
+}
 
 func init() {
-	years := intslice(FirstYear, LastYear)
+	flag.BoolVar(&config.post, "post", false, "set true to query postseason stats")
+	//	flag.Parse()
 
-	lahman.Load(years...)
+	years := ""
+	flag.StringVar(&years, "years", "", "set years to query")
+	flag.Parse()
 
-	playersQ = loadyears(years)
+	var err error
+	config.years, err = valYears(years)
+	if err != nil && years != "" {
+		fmt.Println("'years' flag: ", err)
+	}
 }
 
 func intslice(start, end int) (ns []int) {
@@ -34,9 +46,14 @@ func intslice(start, end int) (ns []int) {
 	return ns
 }
 
-func loadyears(years []int) (ps playerS) {
-	for _, y := range years {
-		playerYears := lahman.GetYear(y)
+func loadyears() (ps playerS) {
+	for _, y := range config.years {
+		var playerYears playerS
+		if config.post {
+			playerYears = lahman.GetPostYear(y)
+		} else {
+			playerYears = lahman.GetYear(y)
+		}
 		for _, p := range playerYears {
 			ps = append(ps, p)
 		}
@@ -44,9 +61,9 @@ func loadyears(years []int) (ps playerS) {
 	return ps
 }
 
-func getyears(years []int) (ps playerS) {
-	for _, p := range playersQ {
-		for _, y := range years {
+func getyears() (ps playerS) {
+	for _, p := range config.playerS {
+		for _, y := range config.years {
 			if p.Year() == y {
 				ps = append(ps, p)
 				break
@@ -56,7 +73,16 @@ func getyears(years []int) (ps playerS) {
 	return ps
 }
 
+func load() {
+	if len(config.years) == 0 {
+		config.years = intslice(FirstYear, LastYear)
+	}
+	lahman.Load(config.years...)
+	config.playerS = loadyears()
+}
+
 func main() {
+	load()
 	fmt.Println("BB Query")
 
 	inputLoop()
@@ -68,6 +94,7 @@ func inputLoop() {
 exit:
 	for {
 		fmt.Println("Enter a query.")
+		//fmt.Println(config.years)
 		input, err := cliReader.ReadString('\n')
 		if err != nil {
 			fmt.Println(err)
