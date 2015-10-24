@@ -26,7 +26,6 @@ var config struct {
 
 func init() {
 	flag.BoolVar(&config.post, "post", false, "set true to query postseason stats")
-	//	flag.Parse()
 
 	years := ""
 	flag.StringVar(&years, "years", "", "set years to query")
@@ -93,7 +92,7 @@ func inputLoop() {
 
 exit:
 	for {
-		fmt.Println("Enter a query.")
+		fmt.Println("\nEnter a query.")
 		//fmt.Println(config.years)
 		input, err := cliReader.ReadString('\n')
 		if err != nil {
@@ -113,7 +112,7 @@ exit:
 				fmt.Println(err)
 				break
 			}
-			//fmt.Println(res)
+
 			err = pipeLess(res)
 			if strings.Contains(fmt.Sprint(err), "file not found") {
 				fmt.Println(res)

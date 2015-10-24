@@ -9,21 +9,50 @@ import (
 	"github.com/frenata/marcel/lahman"
 )
 
+func setconfig(s string) string {
+	configs := strings.Split(strings.TrimPrefix(s, "config:"), ",")
+	_ = configs
+	//fmt.Println(config.years, config.post)
+	for _, c := range configs {
+		switch {
+		case strings.HasPrefix(c, "post="):
+			post, err := strconv.ParseBool(strings.TrimPrefix(c, "post="))
+			if err != nil {
+				return "postseason config must be bool"
+			}
+			config.post = post
+		case strings.HasPrefix(c, "years="):
+			years := strings.TrimPrefix(c, "years=")
+			ns, err := valYears(years)
+			if err != nil {
+				return fmt.Sprintf("years config did not parse correctly %s", err)
+			}
+			config.years = ns
+		case c == "print":
+			return fmt.Sprintf("post?: %t\nyears: %d-%d", config.post, config.years[0], config.years[len(config.years)-1])
+		default:
+			return "config string not recognized"
+		}
+	}
+
+	return "config updated!"
+}
+
 func Query(s string) (r string, err error) {
 	queries := strings.Split(s, ",")
-	if len(queries) <= 1 {
+	if len(queries) < 1 {
 		return "", errors.New("No Query Found")
 	}
 
-	config.years, err = valYears(queries[0])
-	if err != nil {
-		return "", err
+	if strings.HasPrefix(queries[0], "config:") {
+		return "", errors.New(setconfig(queries[0]))
 	}
+
 	players := getyears()
 
 	var bat, pit bool
 	res := playerS{}
-	for i := 1; i < len(queries); i++ {
+	for i := 0; i < len(queries); i++ {
 		q := strings.TrimSpace(queries[i])
 		if len(q) == 0 {
 			return "", errors.New("empty query")
